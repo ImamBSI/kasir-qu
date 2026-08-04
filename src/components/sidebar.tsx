@@ -1,90 +1,104 @@
 "use client";
 
-import { PanelLeft, Home, Settings, ShoppingBasketIcon, WarehouseIcon, Sun, Moon } from "lucide-react";
+import { Home, ShoppingBasketIcon, WarehouseIcon, LogOut, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "../context/ThemeContext";
 
-const routeTitles: Record<string, string> = {
-  "/": "Dashboard",
-  "/pages/pembelian": "Pembelian",
-  "/pages/gudang": "Input Barang",
-};
+const menuItems = [
+  { href: "/", label: "Dashboard", icon: Home },
+  { href: "/pages/pembelian", label: "Pembelian", icon: ShoppingBasketIcon },
+  { href: "/pages/gudang", label: "Input Barang", icon: WarehouseIcon },
+];
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
-  const title = routeTitles[pathname] || "Dashboard";
 
   return (
-    <div className="drawer lg:drawer-open">
-      <input id="my-drawer-4" type="checkbox" className="drawer-toggle inline" />
-      <div className="drawer-content">
-        {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
-          <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost drawer-button"
-          >
-            <PanelLeft className="size-4" />
-          </label>
-          <div className="px-4 font-semibold">{title}</div>
-          <div className="ml-auto">
-            <button
-              onClick={toggleTheme}
-              className="btn btn-ghost btn-circle"
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? (
-                <Sun className="size-5" />
-              ) : (
-                <Moon className="size-5" />
-              )}
-            </button>
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <aside className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+        {/* Logo */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-700 rounded-md flex items-center justify-center">
+              <Home className="size-4 text-white" />
+            </div>
+            <div>
+              <h1 className="font-bold text-gray-900">CommercePro</h1>
+              <p className="text-xs text-gray-500">Admin Console</p>
+            </div>
           </div>
-        </nav>
-        {/* Page content */}
-        {children}
-      </div>
+        </div>
 
-      <div className="drawer-side is-drawer-close:overflow-visible">
-        <label
-          htmlFor="my-drawer-4"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
-          <ul className="menu w-full grow">
+        {/* Menu */}
+        <nav className="flex-1 p-4">
+          <ul className="space-y-1">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-blue-100 text-blue-700"
+                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                    }`}
+                  >
+                    <item.icon className="size-5" />
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200">
+          <ul className="space-y-1">
             <li>
-              <Link
-                href="/"
-                className={pathname === "/" ? "active" : ""}
-              >
-                <Home className="size-4" />
-                <span className="is-drawer-close:hidden">Homepage</span>
-              </Link>
+              <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 w-full">
+                <HelpCircle className="size-5" />
+                Help
+              </button>
             </li>
             <li>
-              <Link
-                href="/pages/pembelian"
-                className={pathname === "/pages/pembelian" ? "active" : ""}
-              >
-                <ShoppingBasketIcon className="size-4" />
-                <span className="is-drawer-close:hidden">Pembelian</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/pages/gudang"
-                className={pathname === "/pages/gudang" ? "active" : ""}
-              >
-                <WarehouseIcon className="size-4" />
-                <span className="is-drawer-close:hidden">Input Barang</span>
-              </Link>
+              <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 w-full">
+                <LogOut className="size-5" />
+                Logout
+              </button>
             </li>
           </ul>
         </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col bg-white">
+        {/* Top Bar */}
+        <header className="h-16 border-b border-gray-200 flex items-center justify-between px-6">
+          <div className="relative w-96">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="relative p-2 text-gray-500 hover:text-gray-700">
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+            <button className="p-2 text-gray-500 hover:text-gray-700">
+              Settings
+            </button>
+            <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 p-6 overflow-auto">
+          {children}
+        </main>
       </div>
     </div>
   );
