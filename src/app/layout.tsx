@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CommercePro - Admin Console",
-  description: "Admin Console",
+  title: "KasirQu",
+  // description: "Admin Console",
 };
 
 export default function RootLayout({

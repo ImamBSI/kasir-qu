@@ -1,6 +1,14 @@
 "use client";
 
-import { Home, ShoppingBasketIcon, WarehouseIcon, LogOut, HelpCircle } from "lucide-react";
+import {
+  Home,
+  ShoppingBasketIcon,
+  WarehouseIcon,
+  LogOut,
+  HelpCircle,
+  TrendingUp,
+  ChartColumnIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,6 +16,7 @@ const menuItems = [
   { href: "/", label: "Dashboard", icon: Home },
   { href: "/pages/pembelian", label: "Pembelian", icon: ShoppingBasketIcon },
   { href: "/pages/gudang", label: "Input Barang", icon: WarehouseIcon },
+  { href: "/pages/Analisa", label: "Analisa", icon: ChartColumnIcon },
 ];
 
 export default function SideBar({ children }: { children: React.ReactNode }) {
@@ -85,20 +94,12 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
             />
           </div>
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-gray-500 hover:text-gray-700">
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700">
-              Settings
-            </button>
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 overflow-auto">
-          {children}
-        </main>
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>
   );
