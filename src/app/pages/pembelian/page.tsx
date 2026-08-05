@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Bell, HelpCircle, ShoppingCart, Minus, Plus } from "lucide-react";
+import {
+  Search,
+  Bell,
+  HelpCircle,
+  ShoppingCart,
+  Minus,
+  Plus,
+} from "lucide-react";
 
 const categories = [
   "Semua Kategori",
@@ -68,7 +75,7 @@ export default function PembelianPage() {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
       return [
@@ -88,19 +95,18 @@ export default function PembelianPage() {
     setCart((prev) =>
       prev
         .map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity + delta } : item
+          item.id === id ? { ...item, quantity: item.quantity + delta } : item,
         )
-        .filter((item) => item.quantity > 0)
+        .filter((item) => item.quantity > 0),
     );
   };
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
-  const tax = Math.round(subtotal * 0.11);
-  const total = subtotal + tax;
+  const total = subtotal;
 
   const formatCurrency = (amount: number) => {
     return `Rp ${amount.toLocaleString("id-ID")}`;
@@ -267,10 +273,6 @@ export default function PembelianPage() {
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Subtotal</span>
             <span className="font-medium">{formatCurrency(subtotal)}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Pajak (11%)</span>
-            <span className="font-medium">{formatCurrency(tax)}</span>
           </div>
           <div className="flex justify-between pt-2 border-t border-gray-200">
             <span className="text-lg font-bold text-gray-900">Total</span>
