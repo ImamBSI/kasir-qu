@@ -1,0 +1,127 @@
+[
+  {
+    "id": 1,
+    "nama": "admin",
+    "role": "admin123"
+  },
+  {
+    "id": 2,
+    "nama": "Imam Septa",
+    "role": "Cashier"
+  },
+  {
+    "id": 3,
+    "nama": "Rohan",
+    "role": "Customer"
+  },
+  {
+    "id": 4,
+    "nama": "Amit",
+    "role": "Customer"
+  },
+  {
+    "id": 5,
+    "nama": "Sofia",
+    "role": "Customer"
+  },
+  {
+    "id": 6,
+    "nama": "Liam",
+    "role": "Customer"
+  },
+  {
+    "id": 7,
+    "nama": "Emma",
+    "role": "Customer"
+  },
+  {
+    "id": 8,
+    "nama": "Noah",
+    "role": "Customer"
+  },
+  {
+    "id": 9,
+    "nama": "Olivia",
+    "role": "Customer"
+  },
+  {
+    "id": 10,
+    "nama": "Ava",
+    "role": "Customer"
+  },
+  {
+    "id": 11,
+    "nama": "William",
+    "role": "Customer"
+  },
+  {
+    "id": 12,
+    "nama": "Mia",
+    "role": "Customer"
+  },
+  {
+    "id": 13,
+    "nama": "James",
+    "role": "Customer"
+  },
+  {
+    "id": 14,
+    "nama": "Isabella",
+    "role": "Customer"
+  },
+  {
+    "id": 15,
+    "nama": "Benjamin",
+    "role": "Customer"
+  },
+  {
+    "id": 16,
+    "nama": "Charlotte",
+    "role": "Customer"
+  },
+  {
+    "id": 17,
+    "nama": "Elijah",
+    "role": "Customer"
+  },
+  {
+    "id": 18,
+    "nama": "Amelia",
+    "role": "Customer"
+  },
+  {
+    "id": 19,
+    "nama": "Lucas",
+    "role": "Customer"
+  },
+  {
+    "id": 20,
+    "nama": "Harper",
+    "role": "Customer"
+  },
+  {
+    "id": 21,
+    "nama": "Mason",
+    "role": "Customer"
+  },
+  {
+    "id": 22,
+    "nama": "Evelyn",
+    "role": "Customer"
+  },
+  {
+    "id": 23,
+    "nama": "Logan",
+    "role": "Customer"
+  },
+  {
+    "id": 24,
+    "nama": "Abigail",
+    "role": "Customer"
+  },
+  {
+    "id": 25,
+    "nama": "Alexander",
+    "role": "Customer"
+  }
+]

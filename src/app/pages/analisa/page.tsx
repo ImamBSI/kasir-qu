@@ -1,4 +1,4 @@
-    export default function GudangPage() {
+    export default function AalisaPage() {
     return (
     <div className="flex flex-col p-2">
       <h1>Ini Page Analisa</h1>

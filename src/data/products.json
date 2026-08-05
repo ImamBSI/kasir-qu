@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Minyak Goreng Kita - 1L",
+    "sku": "OIL-001",
+    "category": "Minyak Goreng Sawit",
+    "image": "/images/minyak-kita.webp",
+    "stock_pcs": 60,
+    "units": [
+      {
+        "satuan": "Pcs",
+        "isi_dalam_satuan_dasar": 1,
+        "price": 17500
+      },
+      {
+        "satuan": "Dus",
+        "isi_dalam_satuan_dasar": 12,
+        "price": 200000
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Minyak Goreng Albisco - 1L",
+    "sku": "OIL-002",
+    "category": "Minyak Goreng Sawit",
+    "image": "/images/albisco.webp",
+    "stock_pcs": 48,
+    "units": [
+      {
+        "satuan": "Pcs",
+        "isi_dalam_satuan_dasar": 1,
+        "price": 19000
+      },
+      {
+        "satuan": "Dus",
+        "isi_dalam_satuan_dasar": 12,
+        "price": 220000
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Minyak Goreng Tropical - 1L",
+    "sku": "OIL-003",
+    "category": "Minyak Goreng Sawit",
+    "image": "/images/tropical-1lt.webp",
+    "stock_pcs": 36,
+    "units": [
+      {
+        "satuan": "Pcs",
+        "isi_dalam_satuan_dasar": 1,
+        "price": 21000
+      },
+      {
+        "satuan": "Dus",
+        "isi_dalam_satuan_dasar": 12,
+        "price": 245000
+      }
+    ]
+  }
+]

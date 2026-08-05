@@ -78,10 +78,6 @@ export default function DashboardPage() {
             Monitor your store's performance and top customers.
           </p>
         </div>
-        {/* <button className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800">
-          <Download className="size-4" />
-          Export Report
-        </button> */}
       </div>
 
       {/* Top Row */}
