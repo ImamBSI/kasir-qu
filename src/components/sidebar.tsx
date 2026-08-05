@@ -8,14 +8,15 @@ import {
   HelpCircle,
   TrendingUp,
   ChartColumnIcon,
+  LayoutDashboardIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const menuItems = [
-  { href: "/", label: "Dashboard", icon: Home },
+  { href: "/", label: "Dashboard", icon: LayoutDashboardIcon },
   { href: "/pages/pembelian", label: "Pembelian", icon: ShoppingBasketIcon },
-  { href: "/pages/gudang", label: "Input Barang", icon: WarehouseIcon },
+  { href: "/pages/gudang", label: "Inventory", icon: WarehouseIcon },
   { href: "/pages/Analisa", label: "Analisa", icon: ChartColumnIcon },
 ];
 
