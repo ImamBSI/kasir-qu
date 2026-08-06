@@ -10,6 +10,7 @@ import {
   ChartColumnIcon,
   LayoutDashboardIcon,
   Search,
+  Store,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -57,7 +58,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-blue-700 rounded-md flex items-center justify-center">
-              <Home className="size-4 text-white" />
+              <Store className="size-4 text-white" />
             </div>
             <div>
               <h1 className="font-bold text-gray-900">CommercePro</h1>

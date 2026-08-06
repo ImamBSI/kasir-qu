@@ -170,8 +170,10 @@ export default function GudangPage() {
                 const selectedUnitIndex = selectedUnits[product.id] ?? 0;
                 const currentUnit =
                   product.units[selectedUnitIndex] ?? product.units[0];
-                const stock = product.stock_pcs;
-                const isLowStock = stock < 20;
+                const displayStock = Math.floor(
+                  product.stock_pcs / currentUnit.isi_dalam_satuan_dasar,
+                );
+                const isLowStock = displayStock < 20;
                 return (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
@@ -254,7 +256,7 @@ export default function GudangPage() {
                         <span
                           className={`text-sm font-semibold ${isLowStock ? "text-red-600" : "text-gray-900"}`}
                         >
-                          {stock}
+                          {displayStock}
                         </span>
                         {isLowStock && (
                           <span className="text-[10px] text-red-500">
