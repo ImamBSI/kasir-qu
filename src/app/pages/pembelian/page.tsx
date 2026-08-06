@@ -142,7 +142,9 @@ export default function PembelianPage() {
 
   return (
     <div className="flex h-screen overflow-hidden">
+      {/* Main Content */}
       <div className="flex-1 flex flex-col bg-gray-50 min-w-0">
+        {/* Search Bar */}
         <div className="p-3 bg-white border-b border-gray-200 shrink-0">
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
@@ -175,7 +177,7 @@ export default function PembelianPage() {
           </div>
         </div>
 
-        {/* Products Grid */}
+        {/* Products Grid - Scrollable */}
         <div className="flex-1 overflow-y-auto p-3">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-2">
             {filteredProducts.map((product) => {
@@ -250,7 +252,7 @@ export default function PembelianPage() {
       {/* Cart Panel */}
       <div className="w-96 bg-white border-l border-gray-200 flex flex-col shrink-0">
         {/* Customer Input */}
-        <div className="p-3 border-b border-gray-200">
+        <div className="p-3 border-b border-gray-200 shrink-0">
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Nama Pelanggan (Opsional)
           </label>
@@ -263,8 +265,8 @@ export default function PembelianPage() {
           />
         </div>
 
-        {/* Cart Items */}
-        <div className="flex-1 overflow-auto p-3">
+        {/* Cart Items - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-3">
           {cart.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-400">
               <ShoppingCart className="size-10 mb-2" />
@@ -373,7 +375,7 @@ export default function PembelianPage() {
         </div>
 
         {/* Summary */}
-        <div className="border-t border-gray-200 p-3 space-y-1.5">
+        <div className="border-t border-gray-200 p-3 space-y-1.5 shrink-0">
           <div className="flex justify-between text-xs">
             <span className="text-gray-600">Total Item</span>
             <span className="font-medium">{totalItems} Items</span>
