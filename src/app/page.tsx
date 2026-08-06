@@ -151,7 +151,6 @@ export default function DashboardPage() {
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* All Customers List */}
         <div className="lg:col-span-2 bg-white border border-gray-200 rounded-lg">
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
