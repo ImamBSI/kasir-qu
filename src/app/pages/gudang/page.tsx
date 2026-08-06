@@ -179,7 +179,7 @@ export default function GudangPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1 bg-blue-700 hover:bg-blue-800 text-white rounded">
+                      <button className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800">
                         Edit
                       </button>
                     </td>
