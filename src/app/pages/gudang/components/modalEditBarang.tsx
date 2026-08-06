@@ -128,7 +128,7 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
               {product.units.map((unit) => (
                 <div key={unit.satuan}>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Harga {unit.satuan}
+                    Harga per {unit.satuan}
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">

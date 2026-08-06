@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import {
   Search,
   Plus,
-  MoreVertical,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -12,16 +11,23 @@ import productsData from "@/data/products.json";
 import type { Product, ProductUnit } from "@/types";
 import { formatCurrency } from "@/utils/format";
 import ModalEditBarang from "./components/modalEditBarang";
+import ModalInputBarang from "./components/modalInputBarang";
 
 const ITEMS_PER_PAGE = 10;
 
 export default function GudangPage() {
-  const [products, setProducts] = useState<Product[]>(productsData as Product[]);
+  const [products, setProducts] = useState<Product[]>(
+    productsData as Product[],
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [currentPage, setCurrentPage] = useState(1);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
+  const [showInputModal, setShowInputModal] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+  const [selectedUnits, setSelectedUnits] = useState<Record<number, number>>(
+    {},
+  );
   const categories = useMemo(() => {
     const cats = [...new Set(products.map((p) => p.category))];
     return ["Semua", ...cats];
@@ -35,7 +41,6 @@ export default function GudangPage() {
       product.sku.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -63,6 +68,24 @@ export default function GudangPage() {
     setEditingProduct(null);
   };
 
+  const handleAddProduct = (newProduct: {
+    name: string;
+    category: string;
+    units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
+  }) => {
+    const maxId = products.reduce((max, p) => Math.max(max, p.id), 0);
+    const product: Product = {
+      id: maxId + 1,
+      name: newProduct.name,
+      sku: `SKU-${maxId + 1}`,
+      category: newProduct.category,
+      image: "/images/default.webp",
+      stock_pcs: 0,
+      units: newProduct.units,
+    };
+    setProducts((prev) => [...prev, product]);
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-start justify-between mb-6">
@@ -72,7 +95,10 @@ export default function GudangPage() {
             Manage stock levels and pricing
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800">
+        <button
+          onClick={() => setShowInputModal(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800"
+        >
           <Plus className="size-4" />
           Tambah Produk
         </button>
@@ -141,7 +167,9 @@ export default function GudangPage() {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {paginatedProducts.map((product) => {
-                const unit = product.units[0];
+                const selectedUnitIndex = selectedUnits[product.id] ?? 0;
+                const currentUnit =
+                  product.units[selectedUnitIndex] ?? product.units[0];
                 const stock = product.stock_pcs;
                 const isLowStock = stock < 20;
                 return (
@@ -164,17 +192,61 @@ export default function GudangPage() {
                       </p>
                     </td>
                     <td className="px-4 py-3">
-                      <select className="text-xs bg-gray-100 border-0 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                        {product.units.map((u) => (
-                          <option key={u.satuan} value={u.satuan}>
-                            {u.satuan.toLowerCase()}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="relative inline-block text-left">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveDropdown(
+                              activeDropdown === product.id ? null : product.id,
+                            );
+                          }}
+                          className="inline-flex items-center justify-between bg-gray-50 border border-gray-200 text-gray-700 text-xs font-medium rounded px-2.5 py-1 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 gap-2"
+                        >
+                          <span>{currentUnit.satuan}</span>
+                          <svg
+                            className="size-3 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </button>
+
+                        {activeDropdown === product.id && (
+                          <div className="absolute left-0 z-50 mt-1 w-28 bg-white border border-gray-200 rounded shadow-md py-1">
+                            {product.units.map((u, index) => (
+                              <button
+                                key={u.satuan}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedUnits((prev) => ({
+                                    ...prev,
+                                    [product.id]: index,
+                                  }));
+                                  setActiveDropdown(null);
+                                }}
+                                className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
+                                  currentUnit.satuan === u.satuan
+                                    ? "bg-blue-50 text-blue-700 font-semibold"
+                                    : "text-gray-700 hover:bg-gray-50"
+                                }`}
+                              >
+                                {u.satuan}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-right">
                       <span className="text-sm font-mono">
-                        {formatCurrency(unit.price)}
+                        {formatCurrency(currentUnit.price)}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -191,12 +263,15 @@ export default function GudangPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-center">
-                      <button 
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800"
-                      onClick={() => setEditingProduct(product)}  >
-                        Edit
-                      </button>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex justify-end">
+                        <button
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800 transition-colors"
+                          onClick={() => setEditingProduct(product)}
+                        >
+                          Edit
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -255,6 +330,15 @@ export default function GudangPage() {
           product={editingProduct}
           onClose={() => setEditingProduct(null)}
           onSave={handleSaveUpdate}
+        />
+      )}
+
+      {/* Modal Input Barang */}
+      {showInputModal && (
+        <ModalInputBarang
+          categories={categories}
+          onClose={() => setShowInputModal(false)}
+          onSave={handleAddProduct}
         />
       )}
     </div>

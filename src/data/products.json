@@ -5,7 +5,7 @@
     "sku": "OIL-001",
     "category": "Minyak Goreng Sawit",
     "image": "/images/minyak-kita.webp",
-    "stock_pcs": 60,
+    "stock_pcs": 10,
     "units": [
       {
         "satuan": "Pcs",
