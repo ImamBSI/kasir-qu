@@ -4,7 +4,6 @@ export interface ProductUnit {
   price: number;
 }
 
-// Ubah dari 'Products' (jamak) menjadi 'Product' (tunggal) agar konsisten dengan pemanggilan di page
 export interface Product {
   id: number;          
   name: string;

@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Minyak Goreng Kita - 1L",
+    "name": "Minyak Kita - 1L",
     "sku": "OIL-001",
     "category": "Minyak Goreng Sawit",
     "image": "/images/minyak-kita.webp",
@@ -21,7 +21,7 @@
   },
   {
     "id": 2,
-    "name": "Minyak Goreng Albisco - 1L",
+    "name": "Minyak Albisco - 1L",
     "sku": "OIL-002",
     "category": "Minyak Goreng Sawit",
     "image": "/images/albisco.webp",
@@ -41,7 +41,7 @@
   },
   {
     "id": 3,
-    "name": "Minyak Goreng Tropical - 1L",
+    "name": "Minyak Tropical - 1L",
     "sku": "OIL-003",
     "category": "Minyak Goreng Sawit",
     "image": "/images/tropical-1lt.webp",
@@ -56,6 +56,81 @@
         "satuan": "Dus",
         "isi_dalam_satuan_dasar": 12,
         "price": 245000
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Bumbu Sajiku Nasi Goreng",
+    "sku": "SPICE-001",
+    "category": "Bumbu Dapur",
+    "image": "/images/sajiku.webp",
+    "stock_pcs": 120, 
+    "units": [
+      {
+        "satuan": "Pcs",
+        "isi_dalam_satuan_dasar": 1,
+        "price": 1500
+      },
+      {
+        "satuan": "Rcg",
+        "isi_dalam_satuan_dasar": 10,
+        "price": 14000
+      },
+      {
+        "satuan": "Dus",
+        "isi_dalam_satuan_dasar": 60,
+        "price": 80000
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Bumbu Sajiku Ayam Goreng",
+    "sku": "SPICE-002",
+    "category": "Bumbu Dapur",
+    "image": "/images/sajiku2.webp",
+    "stock_pcs": 100, 
+    "units": [
+      {
+        "satuan": "Pcs",
+        "isi_dalam_satuan_dasar": 1,
+        "price": 2000
+      },
+      {
+        "satuan": "Rcg",
+        "isi_dalam_satuan_dasar": 10,
+        "price": 18000
+      },
+      {
+        "satuan": "Dus",
+        "isi_dalam_satuan_dasar": 60,
+        "price": 100000
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Bumbu Sajiku Serbaguna",
+    "sku": "SPICE-003",
+    "category": "Bumbu Dapur",
+    "image": "/images/sajiku3.webp",
+    "stock_pcs": 80, 
+    "units": [
+      {
+        "satuan": "Pcs",
+        "isi_dalam_satuan_dasar": 1,
+        "price": 2500
+      },
+      {
+        "satuan": "Rcg",
+        "isi_dalam_satuan_dasar": 10,
+        "price": 22000
+      },
+      {
+        "satuan": "Dus",
+        "isi_dalam_satuan_dasar": 60,
+        "price": 120000
       }
     ]
   }

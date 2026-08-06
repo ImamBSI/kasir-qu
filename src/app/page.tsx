@@ -1,19 +1,7 @@
 "use client";
 
-import {
-  Trophy,
-  PieChart,
-  ListFilter,
-  TrendingUp,
-  Download,
-} from "lucide-react";
-import {
-  PieChart as RechartsPieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Trophy, PieChart, ListFilter, TrendingUp } from "lucide-react";
+import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 const topBuyers = [
   {
