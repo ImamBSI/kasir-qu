@@ -10,14 +10,17 @@ import {
 } from "lucide-react";
 import productsData from "@/data/products.json";
 import type { Product, ProductUnit } from "@/types";
+import { formatCurrency } from "@/utils/format";
+import ModalEditBarang from "./components/modalEditBarang";
 
 const ITEMS_PER_PAGE = 10;
 
 export default function GudangPage() {
-  const products = productsData as Product[];
+  const [products, setProducts] = useState<Product[]>(productsData as Product[]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [currentPage, setCurrentPage] = useState(1);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const categories = useMemo(() => {
     const cats = [...new Set(products.map((p) => p.category))];
@@ -45,13 +48,23 @@ export default function GudangPage() {
     filteredProducts.length,
   );
 
-  const formatCurrency = (amount: number) => {
-    return amount.toLocaleString("id-ID");
+  const handleSaveUpdate = (
+    productId: number,
+    updatedUnits: ProductUnit[],
+    updatedStock: number
+  ) => {
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === productId
+          ? { ...p, units: updatedUnits, stock_pcs: updatedStock }
+          : p
+      )
+    );
+    setEditingProduct(null);
   };
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Inventory</h1>
@@ -179,7 +192,9 @@ export default function GudangPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <button className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800">
+                      <button 
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800"
+                      onClick={() => setEditingProduct(product)}  >
                         Edit
                       </button>
                     </td>
@@ -233,6 +248,15 @@ export default function GudangPage() {
           </div>
         )}
       </div>
+
+      {/* Modal Edit */}
+      {editingProduct && (
+        <ModalEditBarang
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+          onSave={handleSaveUpdate}
+        />
+      )}
     </div>
   );
 }
