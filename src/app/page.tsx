@@ -102,7 +102,7 @@ export default function DashboardPage() {
         },
         emphasis: {
           label: {
-            show: true,
+            show: false,
             fontSize: 16,
             fontWeight: "bold",
           },
