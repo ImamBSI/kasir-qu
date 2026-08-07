@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Trophy, PieChart, ListFilter, TrendingUp, TableIcon } from "lucide-react";
-import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import ReactECharts from "echarts-for-react";
 import purchasedData from "@/data/purchased.json";
 import type { Order } from "@/types";
 import DateRange from "@/components/DateRange";
@@ -32,12 +32,7 @@ const topBuyers = [
   },
 ];
 
-const categoryData = [
-  { name: "Electronics", value: 40, color: "#2563eb" },
-  { name: "Clothing", value: 30, color: "#6b7280" },
-  { name: "Home", value: 20, color: "#93c5fd" },
-  { name: "Others", value: 10, color: "#dbeafe" },
-];
+const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#6b7280"];
 
 const rankColors = ["bg-yellow-400", "bg-gray-300", "bg-orange-400"];
 
@@ -53,9 +48,75 @@ export default function DashboardPage() {
     });
   }, [orders, startDate, endDate]);
 
+  const salesProductData = useMemo(() => {
+    const productSales: Record<string, number> = {};
+    let totalSales = 0;
+
+    filteredOrders.forEach((order) => {
+      order.items.forEach((item) => {
+        const name = item.item_name;
+        productSales[name] = (productSales[name] || 0) + item.subtotal;
+        totalSales += item.subtotal;
+      });
+    });
+
+    return Object.entries(productSales)
+      .map(([name, value], index) => ({
+        name,
+        value,
+        color: COLORS[index % COLORS.length],
+        percentage: totalSales > 0 ? ((value / totalSales) * 100).toFixed(1) : "0",
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [filteredOrders]);
+
+  const totalRevenue = salesProductData.reduce((sum, item) => sum + item.value, 0);
+
   const handleDateChange = (newStart: string, newEnd: string) => {
     setStartDate(newStart);
     setEndDate(newEnd);
+  };
+
+  const pieChartOption = {
+    tooltip: {
+      trigger: "item",
+      formatter: "{b}: {c} ({d}%)",
+    },
+    legend: {
+      show: false,
+    },
+    series: [
+      {
+        name: "Sales",
+        type: "pie",
+        radius: "70%",
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 0,
+          borderColor: "#fff",
+          borderWidth: 2,
+        },
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 16,
+            fontWeight: "bold",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: salesProductData.map((item) => ({
+          value: item.value,
+          name: item.name,
+          itemStyle: { color: item.color },
+        })),
+      },
+    ],
   };
 
   return (
@@ -104,44 +165,31 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Category Distribution */}
+          {/* Sales Distribution Chart */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
               <PieChart className="size-5 text-blue-600" />
-              Category Distribution
+              Sales Distribution
             </h2>
             <div className="flex flex-col items-center">
-              <ResponsiveContainer width="100%" height={200}>
-                <RechartsPieChart>
-                  <Pie
-                    data={categoryData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {categoryData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </RechartsPieChart>
-              </ResponsiveContainer>
-              <div className="text-center -mt-8 mb-4">
-                <p className="text-xs text-gray-500">Total</p>
-                <p className="text-xl font-bold text-gray-900">12.5k</p>
+              <div className="w-full h-[200px]">
+                <ReactECharts option={pieChartOption} style={{ height: "100%", width: "100%" }} />
+              </div>
+              <div className="text-center -mt-4 mb-4">
+                <p className="text-xs text-gray-500">Total Sales</p>
+                <p className="text-xl font-bold text-gray-900">
+                  Rp {formatCurrency(totalRevenue)}
+                </p>
               </div>
               <div className="flex flex-wrap gap-4 justify-center">
-                {categoryData.map((cat) => (
+                {salesProductData.map((cat) => (
                   <div key={cat.name} className="flex items-center gap-2">
                     <span
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: cat.color }}
                     ></span>
                     <span className="text-xs text-gray-600">
-                      {cat.name} ({cat.value}%)
+                      {cat.name} ({cat.percentage}%)
                     </span>
                   </div>
                 ))}
@@ -164,23 +212,23 @@ export default function DashboardPage() {
                 onChange={handleDateChange}
               />
             </div>
-            <div className="overflow-x-auto max-h-100 overflow-y-auto">
+            <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
               <table className="w-full">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
-                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Customer
                     </th>
-                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Items
                     </th>
-                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Qty
                     </th>
-                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Satuan
                     </th>
-                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Total Amount
                     </th>
                   </tr>
@@ -232,9 +280,8 @@ export default function DashboardPage() {
             <div className="mb-6">
               <p className="text-xs text-blue-200 uppercase">Total Revenue</p>
               <div className="flex items-end gap-3">
-                <span className="text-3xl font-bold">$84,520</span>
-                <span className="text-sm bg-blue-600/50 px-2 py-1 rounded mb-1">
-                  ↑12.5%
+                <span className="text-3xl font-bold">
+                  Rp {formatCurrency(totalRevenue)}
                 </span>
               </div>
             </div>
@@ -242,11 +289,18 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
                 <p className="text-xs text-blue-200">Orders</p>
-                <p className="text-2xl font-bold">1,248</p>
+                <p className="text-2xl font-bold">{filteredOrders.length}</p>
               </div>
               <div>
                 <p className="text-xs text-blue-200">Avg. Value</p>
-                <p className="text-2xl font-bold">$67.72</p>
+                <p className="text-2xl font-bold">
+                  Rp{" "}
+                  {formatCurrency(
+                    filteredOrders.length > 0
+                      ? Math.round(totalRevenue / filteredOrders.length)
+                      : 0
+                  )}
+                </p>
               </div>
             </div>
 
