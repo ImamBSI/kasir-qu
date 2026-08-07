@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Minyak Kita - 1L",
+    "name": "Kita - 1L",
     "sku": "OIL-001",
     "category": "Minyak Goreng Sawit",
     "image": "/images/minyak-kita.webp",
@@ -21,7 +21,7 @@
   },
   {
     "id": 2,
-    "name": "Minyak Albisco - 1L",
+    "name": "Albisco - 1L",
     "sku": "OIL-002",
     "category": "Minyak Goreng Sawit",
     "image": "/images/albisco.webp",
@@ -41,7 +41,7 @@
   },
   {
     "id": 3,
-    "name": "Minyak Tropical - 1L",
+    "name": "Tropical - 1L",
     "sku": "OIL-003",
     "category": "Minyak Goreng Sawit",
     "image": "/images/tropical-1lt.webp",
@@ -61,7 +61,7 @@
   },
   {
     "id": 4,
-    "name": "Bumbu Sajiku Nasi Goreng",
+    "name": "Sajiku Nasi Goreng",
     "sku": "SPICE-001",
     "category": "Bumbu Dapur",
     "image": "/images/sajiku.webp",
@@ -86,7 +86,7 @@
   },
   {
     "id": 5,
-    "name": "Bumbu Sajiku Ayam Goreng",
+    "name": "Sajiku Ayam Goreng",
     "sku": "SPICE-002",
     "category": "Bumbu Dapur",
     "image": "/images/sajiku2.webp",
@@ -111,7 +111,7 @@
   },
   {
     "id": 6,
-    "name": "Bumbu Sajiku Serbaguna",
+    "name": "Sajiku Serbaguna",
     "sku": "SPICE-003",
     "category": "Bumbu Dapur",
     "image": "/images/sajiku3.webp",

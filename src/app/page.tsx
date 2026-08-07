@@ -6,7 +6,7 @@ import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip }
 import purchasedData from "@/data/purchased.json";
 import type { Order } from "@/types";
 import DateRange from "@/components/DateRange";
-import { formatCurrency, formatDate } from "@/utils/format";
+import { formatCurrency } from "@/utils/format";
 
 const topBuyers = [
   {
@@ -168,22 +168,19 @@ export default function DashboardPage() {
               <table className="w-full">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Customer
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Items
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Qty
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Satuan
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Total Amount
                     </th>
                   </tr>
@@ -191,9 +188,6 @@ export default function DashboardPage() {
                 <tbody className="divide-y divide-gray-200">
                   {filteredOrders.map((order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-2 py-4 text-sm text-gray-500">
-                        {formatDate(order.order_date)}
-                      </td>
                       <td className="px-2 py-4 text-sm font-medium text-gray-900">
                         {order.customer_name || "Walk-in Customer"}
                       </td>

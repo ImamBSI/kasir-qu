@@ -7,7 +7,7 @@
     "items": [
       {
         "item_id": "OIL-001",
-        "item_name": "Minyak Kita - 1L",
+        "item_name": "Kita - 1L",
         "quantity": 5,
         "unit": "dus",
         "unit_price": 200000,
@@ -23,7 +23,7 @@
     "items": [
       {
         "item_id": "OIL-002",
-        "item_name": "Minyak Albisco - 1L",
+        "item_name": "Albisco - 1L",
         "quantity": 3,
         "unit": "dus",
         "unit_price": 220000,
@@ -31,7 +31,7 @@
       },
       {
         "item_id": "OIL-003",
-        "item_name": "Minyak Tropical - 1L",
+        "item_name": "Tropical - 1L",
         "quantity": 2,
         "unit": "pcs",
         "unit_price": 21000,
@@ -47,7 +47,7 @@
     "items": [
       {
         "item_id": "OIL-003",
-        "item_name": "Minyak Tropical - 1L",
+        "item_name": "Tropical - 1L",
         "quantity": 10,
         "unit": "pcs",
         "unit_price": 21000,
@@ -63,7 +63,7 @@
     "items": [
       {
         "item_id": "OIL-001",
-        "item_name": "Minyak Kita - 1L",
+        "item_name": "Kita - 1L",
         "quantity": 2,
         "unit": "dus",
         "unit_price": 200000,
@@ -79,7 +79,7 @@
     "items": [
       {
         "item_id": "OIL-003",
-        "item_name": "Minyak Tropical - 1L",
+        "item_name": "Tropical - 1L",
         "quantity": 10,
         "unit": "pcs",
         "unit_price": 21000,
@@ -95,7 +95,7 @@
     "items": [
       {
         "item_id": "SPICE-002",
-        "item_name": "Bumbu Sajiku Ayam Goreng",
+        "item_name": "Sajiku Ayam Goreng",
         "quantity": 2,
         "unit": "dus",
         "unit_price": 100000,
@@ -111,7 +111,7 @@
     "items": [
       {
         "item_id": "OIL-003",
-        "item_name": "Minyak Tropical - 1L",
+        "item_name": "Tropical - 1L",
         "quantity": 10,
         "unit": "pcs",
         "unit_price": 21000,
@@ -127,7 +127,7 @@
     "items": [
       {
         "item_id": "SPICE-002",
-        "item_name": "Bumbu Sajiku Ayam Goreng",
+        "item_name": "Sajiku Ayam Goreng",
         "quantity": 2,
         "unit": "dus",
         "unit_price": 100000,
@@ -143,7 +143,7 @@
     "items": [
       {
         "item_id": "OIL-003",
-        "item_name": "Minyak Tropical - 1L",
+        "item_name": "Tropical - 1L",
         "quantity": 10,
         "unit": "pcs",
         "unit_price": 21000,
@@ -159,7 +159,7 @@
     "items": [
       {
         "item_id": "SPICE-002",
-        "item_name": "Bumbu Sajiku Ayam Goreng",
+        "item_name": "Sajiku Ayam Goreng",
         "quantity": 2,
         "unit": "dus",
         "unit_price": 100000,
