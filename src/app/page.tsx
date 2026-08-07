@@ -1,7 +1,12 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { Trophy, PieChart, ListFilter, TrendingUp, TableIcon } from "lucide-react";
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import purchasedData from "@/data/purchased.json";
+import type { Order } from "@/types";
+import DateRange from "@/components/DateRange";
+import { formatCurrency } from "@/utils/format";
 
 const topBuyers = [
   {
@@ -34,28 +39,33 @@ const categoryData = [
   { name: "Others", value: 10, color: "#dbeafe" },
 ];
 
-const customersList = [
-  { rank: 4, name: "David Miller", purchases: "$6,430.00", status: "Active" },
-  { rank: 5, name: "Jessica Lee", purchases: "$5,900.25", status: "Active" },
-  {
-    rank: 6,
-    name: "Robert Taylor",
-    purchases: "$4,210.00",
-    status: "Inactive",
-  },
-  { rank: 7, name: "Amanda White", purchases: "$3,850.50", status: "Active" },
-  { rank: 8, name: "James Wilson", purchases: "$2,900.00", status: "At Risk" },
-];
-
-const statusColors: Record<string, string> = {
-  Active: "bg-green-100 text-green-700",
-  Inactive: "bg-gray-100 text-gray-600",
-  "At Risk": "bg-red-100 text-red-700",
-};
-
 const rankColors = ["bg-yellow-400", "bg-gray-300", "bg-orange-400"];
 
 export default function DashboardPage() {
+  const orders = purchasedData as Order[];
+  const [startDate, setStartDate] = useState("2026-08-07");
+  const [endDate, setEndDate] = useState("2026-08-07");
+
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
+      const orderDate = order.order_date.split("T")[0];
+      return orderDate >= startDate && orderDate <= endDate;
+    });
+  }, [orders, startDate, endDate]);
+
+  const handleDateChange = (newStart: string, newEnd: string) => {
+    setStartDate(newStart);
+    setEndDate(newEnd);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       {/* Header */}
@@ -153,42 +163,55 @@ export default function DashboardPage() {
 
         {/* Bottom Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Orders */}
           <div className="lg:col-span-2 bg-white border border-gray-200 rounded-lg">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <TableIcon className="size-5 text-blue-600" />
-                All Customers List
+                Recent Order
               </h2>
-              <button className="p-2 text-gray-400 hover:text-gray-600">
-                <ListFilter className="size-4" />
-              </button>
+              <DateRange
+                startDate={startDate}
+                endDate={endDate}
+                onChange={handleDateChange}
+              />
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Rank
+                      Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Nama Customer
+                      Customer
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Total Pembelian
+                      Items
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Total Amount
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {customersList.map((customer) => (
-                    <tr key={customer.rank} className="hover:bg-gray-50">
+                  {filteredOrders.map((order) => (
+                    <tr key={order.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 text-sm text-gray-500">
-                        #{customer.rank}
+                        {formatDate(order.order_date)}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        {customer.name}
+                        {order.customer_name || "Walk-in Customer"}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
-                        {customer.purchases}
+                        {order.items.map((item) => (
+                          <div key={item.item_id} className="text-xs">
+                            {item.item_name} ({item.quantity} {item.unit})
+                          </div>
+                        ))}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                        Rp {formatCurrency(order.total_price)}
                       </td>
                     </tr>
                   ))}
