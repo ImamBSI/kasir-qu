@@ -6,7 +6,7 @@ import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip }
 import purchasedData from "@/data/purchased.json";
 import type { Order } from "@/types";
 import DateRange from "@/components/DateRange";
-import { formatCurrency } from "@/utils/format";
+import { formatCurrency, formatDate } from "@/utils/format";
 
 const topBuyers = [
   {
@@ -58,17 +58,8 @@ export default function DashboardPage() {
     setEndDate(newEnd);
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("id-ID", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-      {/* Header */}
       <div className="flex items-start justify-between mb-6 shrink-0">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Overview</h1>
@@ -80,9 +71,7 @@ export default function DashboardPage() {
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
-        {/* Top Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Top 3 Buyers */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
               <Trophy className="size-5 text-blue-600" />
@@ -162,8 +151,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Bottom Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Orders */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div className="lg:col-span-2 bg-white border border-gray-200 rounded-lg">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -176,10 +164,10 @@ export default function DashboardPage() {
                 onChange={handleDateChange}
               />
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-100 overflow-y-auto">
               <table className="w-full">
-                <thead>
-                  <tr className="bg-gray-50">
+                <thead className="sticky top-0 bg-gray-50 z-10">
+                  <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Date
                     </th>
@@ -190,6 +178,12 @@ export default function DashboardPage() {
                       Items
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Qty
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Satuan
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                       Total Amount
                     </th>
                   </tr>
@@ -197,20 +191,34 @@ export default function DashboardPage() {
                 <tbody className="divide-y divide-gray-200">
                   {filteredOrders.map((order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-2 py-4 text-sm text-gray-500">
                         {formatDate(order.order_date)}
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      <td className="px-2 py-4 text-sm font-medium text-gray-900">
                         {order.customer_name || "Walk-in Customer"}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-2 py-4 text-sm text-gray-600">
                         {order.items.map((item) => (
                           <div key={item.item_id} className="text-xs">
-                            {item.item_name} ({item.quantity} {item.unit})
+                            {item.item_name}
                           </div>
                         ))}
                       </td>
-                      <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                      <td className="px-2 py-4 text-sm text-gray-600">
+                        {order.items.map((item) => (
+                          <div key={item.item_id} className="text-xs">
+                            {item.quantity}
+                          </div>
+                        ))}
+                      </td>
+                      <td className="px-2 py-4 text-sm text-gray-600">
+                        {order.items.map((item) => (
+                          <div key={item.item_id} className="text-xs">
+                            {item.unit}
+                          </div>
+                        ))}
+                      </td>
+                      <td className="px-2 py-4 text-sm font-semibold text-gray-900">
                         Rp {formatCurrency(order.total_price)}
                       </td>
                     </tr>
@@ -220,8 +228,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Sales Summary */}
-          <div className="bg-linear-to-br from-blue-700 to-blue-900 rounded-lg p-6 text-white">
+          <div className="bg-linear-to-br from-blue-700 to-blue-900 rounded-lg p-6 max-h-2/3 text-white">
             <h2 className="text-lg font-semibold flex items-center gap-2 mb-1">
               <TrendingUp className="size-5" />
               Sales Summary
