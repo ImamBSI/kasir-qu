@@ -17,25 +17,16 @@ export default function DateRange({
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
 
-  // Fungsi untuk memicu pop-up kalender bawaan browser
   const openPicker = (ref: React.RefObject<HTMLInputElement | null>) => {
     try {
-      // showPicker() didukung di browser modern
       ref.current?.showPicker();
     } catch (error) {
-      // Fallback jika browser lawas
       ref.current?.focus();
     }
   };
 
   return (
     <div className="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
-      {/* <button 
-        type="button" 
-        onClick={() => openPicker(startInputRef)}
-        className="focus:outline-none"
-      >
-      </button> */}
       <Calendar className="size-4 text-slate-600 hover:text-slate-900 cursor-pointer" />
 
       <input
