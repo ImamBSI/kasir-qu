@@ -1,39 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Trophy, PieChart, ListFilter, TrendingUp, TableIcon } from "lucide-react";
-import ReactECharts from "echarts-for-react";
+import { Trophy, PieChart, TrendingUp, TableIcon, ChartNoAxesCombinedIcon } from "lucide-react";
 import purchasedData from "@/data/purchased.json";
 import type { Order } from "@/types";
 import DateRange from "@/components/DateRange";
 import { formatCurrency } from "@/utils/format";
+import CustomPieChart from "@/components/PieChart"; // Import komponen baru
 
 const topBuyers = [
-  {
-    name: "Sarah Jenkins",
-    tier: "Premium Member",
-    amount: "$12,450.00",
-    items: 142,
-    rank: 1,
-  },
-  {
-    name: "Michael Chen",
-    tier: "Gold Member",
-    amount: "$9,820.50",
-    items: 89,
-    rank: 2,
-  },
-  {
-    name: "Emma Watson",
-    tier: "Silver Member",
-    amount: "$7,105.25",
-    items: 105,
-    rank: 3,
-  },
+  { name: "Sarah Jenkins", tier: "Premium Member", amount: "$12,450.00", items: 142, rank: 1 },
+  { name: "Michael Chen", tier: "Gold Member", amount: "$9,820.50", items: 89, rank: 2 },
+  { name: "Emma Watson", tier: "Silver Member", amount: "$7,105.25", items: 105, rank: 3 },
 ];
 
 const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#6b7280"];
-
 const rankColors = ["bg-yellow-400", "bg-gray-300", "bg-orange-400"];
 
 export default function DashboardPage() {
@@ -77,48 +58,6 @@ export default function DashboardPage() {
     setEndDate(newEnd);
   };
 
-  const pieChartOption = {
-    tooltip: {
-      trigger: "item",
-      formatter: "{b}: {c} ({d}%)",
-    },
-    legend: {
-      show: false,
-    },
-    series: [
-      {
-        name: "Sales",
-        type: "pie",
-        radius: "70%",
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 0,
-          borderColor: "#fff",
-          borderWidth: 2,
-        },
-        label: {
-          show: false,
-          position: "center",
-        },
-        emphasis: {
-          label: {
-            show: false,
-            fontSize: 16,
-            fontWeight: "bold",
-          },
-        },
-        labelLine: {
-          show: false,
-        },
-        data: salesProductData.map((item) => ({
-          value: item.value,
-          name: item.name,
-          itemStyle: { color: item.color },
-        })),
-      },
-    ],
-  };
-
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex items-start justify-between mb-6 shrink-0">
@@ -130,9 +69,10 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
+          
+          {/* Top Customers Card */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
               <Trophy className="size-5 text-blue-600" />
@@ -140,15 +80,10 @@ export default function DashboardPage() {
             </h2>
             <div className="space-y-3">
               {topBuyers.map((buyer) => (
-                <div
-                  key={buyer.rank}
-                  className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
-                >
+                <div key={buyer.rank} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
                   <div className="relative">
                     <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-                    <span
-                      className={`absolute -bottom-1 -right-1 w-5 h-5 ${rankColors[buyer.rank - 1]} rounded-full text-xs font-bold text-white flex items-center justify-center`}
-                    >
+                    <span className={`absolute -bottom-1 -right-1 w-5 h-5 ${rankColors[buyer.rank - 1]} rounded-full text-xs font-bold text-white flex items-center justify-center`}>
                       {buyer.rank}
                     </span>
                   </div>
@@ -165,36 +100,20 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Sales Distribution Chart */}
+          {/* Sales Distribution Chart - Sekarang Jauh Lebih Bersih! */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
               <PieChart className="size-5 text-blue-600" />
               Sales Distribution
             </h2>
-            <div className="flex flex-col items-center">
-              <div className="w-full h-[200px]">
-                <ReactECharts option={pieChartOption} style={{ height: "100%", width: "100%" }} />
-              </div>
-              <div className="text-center -mt-4 mb-4">
-                <p className="text-xs text-gray-500">Total Sales</p>
-                <p className="text-xl font-bold text-gray-900">
-                  Rp {formatCurrency(totalRevenue)}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-4 justify-center">
-                {salesProductData.map((cat) => (
-                  <div key={cat.name} className="flex items-center gap-2">
-                    <span
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: cat.color }}
-                    ></span>
-                    <span className="text-xs text-gray-600">
-                      {cat.name} ({cat.percentage}%)
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            
+            <CustomPieChart 
+              data={salesProductData} 
+              seriesName="Sales"
+              totalLabel="Total Sales"
+              totalValue={`Rp ${formatCurrency(totalRevenue)}`}
+            />
+            
           </div>
         </div>
 
@@ -216,21 +135,11 @@ export default function DashboardPage() {
               <table className="w-full">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Customer
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Items
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Qty
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Satuan
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Total Amount
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Qty</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Satuan</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Amount</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -241,23 +150,17 @@ export default function DashboardPage() {
                       </td>
                       <td className="px-2 py-4 text-sm text-gray-600">
                         {order.items.map((item) => (
-                          <div key={item.item_id} className="text-xs">
-                            {item.item_name}
-                          </div>
+                          <div key={item.item_id} className="text-xs">{item.item_name}</div>
                         ))}
                       </td>
                       <td className="px-2 py-4 text-sm text-gray-600">
                         {order.items.map((item) => (
-                          <div key={item.item_id} className="text-xs">
-                            {item.quantity}
-                          </div>
+                          <div key={item.item_id} className="text-xs">{item.quantity}</div>
                         ))}
                       </td>
                       <td className="px-2 py-4 text-sm text-gray-600">
                         {order.items.map((item) => (
-                          <div key={item.item_id} className="text-xs">
-                            {item.unit}
-                          </div>
+                          <div key={item.item_id} className="text-xs">{item.unit}</div>
                         ))}
                       </td>
                       <td className="px-2 py-4 text-sm font-semibold text-gray-900">
@@ -272,7 +175,7 @@ export default function DashboardPage() {
 
           <div className="bg-linear-to-br from-blue-700 to-blue-900 rounded-lg p-6 max-h-2/3 text-white">
             <h2 className="text-lg font-semibold flex items-center gap-2 mb-1">
-              <TrendingUp className="size-5" />
+              <ChartNoAxesCombinedIcon className="size-5" />
               Sales Summary
             </h2>
             <p className="text-sm text-blue-200 mb-6">Monthly Performance</p>
