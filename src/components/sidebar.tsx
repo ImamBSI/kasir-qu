@@ -18,7 +18,7 @@ const menuItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboardIcon },
   { href: "/pages/pembelian", label: "Pembelian", icon: ShoppingBasketIcon },
   { href: "/pages/gudang", label: "Inventory", icon: WarehouseIcon },
-  { href: "/pages/analisa", label: "Analisa", icon: ChartColumnIcon },
+  { href: "/pages/laporan", label: "Laporan", icon: ChartColumnIcon },
 ];
 
 export default function SideBar({ children }: { children: React.ReactNode }) {

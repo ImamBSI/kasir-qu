@@ -1,0 +1,1298 @@
+[
+  {
+    "month": "2024-09",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 604,
+    "revenue": 9440520,
+    "sell_price": 15630,
+    "cost_price": 13400
+  },
+  {
+    "month": "2024-09",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 392,
+    "revenue": 6985440,
+    "sell_price": 17820,
+    "cost_price": 15150
+  },
+  {
+    "month": "2024-09",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 220,
+    "revenue": 4622200,
+    "sell_price": 21010,
+    "cost_price": 17800
+  },
+  {
+    "month": "2024-09",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 932,
+    "revenue": 1267520,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2024-09",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 805,
+    "revenue": 1360450,
+    "sell_price": 1690,
+    "cost_price": 1250
+  },
+  {
+    "month": "2024-09",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 467,
+    "revenue": 1111460,
+    "sell_price": 2380,
+    "cost_price": 1750
+  },
+  {
+    "month": "2024-10",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 538,
+    "revenue": 8408940,
+    "sell_price": 15630,
+    "cost_price": 13750
+  },
+  {
+    "month": "2024-10",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 333,
+    "revenue": 5934060,
+    "sell_price": 17820,
+    "cost_price": 15150
+  },
+  {
+    "month": "2024-10",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 251,
+    "revenue": 5273510,
+    "sell_price": 21010,
+    "cost_price": 18100
+  },
+  {
+    "month": "2024-10",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 858,
+    "revenue": 1166880,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2024-10",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 801,
+    "revenue": 1353690,
+    "sell_price": 1690,
+    "cost_price": 1200
+  },
+  {
+    "month": "2024-10",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 522,
+    "revenue": 1242360,
+    "sell_price": 2380,
+    "cost_price": 1750
+  },
+  {
+    "month": "2024-11",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 598,
+    "revenue": 9346740,
+    "sell_price": 15630,
+    "cost_price": 13400
+  },
+  {
+    "month": "2024-11",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 329,
+    "revenue": 5862780,
+    "sell_price": 17820,
+    "cost_price": 15350
+  },
+  {
+    "month": "2024-11",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 243,
+    "revenue": 5105430,
+    "sell_price": 21010,
+    "cost_price": 18050
+  },
+  {
+    "month": "2024-11",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 902,
+    "revenue": 1226720,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2024-11",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 734,
+    "revenue": 1240460,
+    "sell_price": 1690,
+    "cost_price": 1250
+  },
+  {
+    "month": "2024-11",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 601,
+    "revenue": 1430380,
+    "sell_price": 2380,
+    "cost_price": 1750
+  },
+  {
+    "month": "2024-12",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 705,
+    "revenue": 11019150,
+    "sell_price": 15630,
+    "cost_price": 13400
+  },
+  {
+    "month": "2024-12",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 457,
+    "revenue": 8143740,
+    "sell_price": 17820,
+    "cost_price": 15500
+  },
+  {
+    "month": "2024-12",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 260,
+    "revenue": 5462600,
+    "sell_price": 21010,
+    "cost_price": 18200
+  },
+  {
+    "month": "2024-12",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1053,
+    "revenue": 1432080,
+    "sell_price": 1360,
+    "cost_price": 1050
+  },
+  {
+    "month": "2024-12",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 803,
+    "revenue": 1357070,
+    "sell_price": 1690,
+    "cost_price": 1200
+  },
+  {
+    "month": "2024-12",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 574,
+    "revenue": 1366120,
+    "sell_price": 2380,
+    "cost_price": 1750
+  },
+  {
+    "month": "2025-01",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 580,
+    "revenue": 9065400,
+    "sell_price": 15630,
+    "cost_price": 13400
+  },
+  {
+    "month": "2025-01",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 374,
+    "revenue": 6664680,
+    "sell_price": 17820,
+    "cost_price": 15050
+  },
+  {
+    "month": "2025-01",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 211,
+    "revenue": 4433110,
+    "sell_price": 21010,
+    "cost_price": 18150
+  },
+  {
+    "month": "2025-01",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 764,
+    "revenue": 1039040,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-01",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 778,
+    "revenue": 1369280,
+    "sell_price": 1760,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-01",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 559,
+    "revenue": 1330420,
+    "sell_price": 2380,
+    "cost_price": 1750
+  },
+  {
+    "month": "2025-02",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 655,
+    "revenue": 10237650,
+    "sell_price": 15630,
+    "cost_price": 13750
+  },
+  {
+    "month": "2025-02",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 413,
+    "revenue": 7359660,
+    "sell_price": 17820,
+    "cost_price": 15450
+  },
+  {
+    "month": "2025-02",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 228,
+    "revenue": 4719600,
+    "sell_price": 20700,
+    "cost_price": 17750
+  },
+  {
+    "month": "2025-02",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 992,
+    "revenue": 1349120,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-02",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 873,
+    "revenue": 1536480,
+    "sell_price": 1760,
+    "cost_price": 1250
+  },
+  {
+    "month": "2025-02",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 474,
+    "revenue": 1128120,
+    "sell_price": 2380,
+    "cost_price": 1750
+  },
+  {
+    "month": "2025-03",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 966,
+    "revenue": 15098580,
+    "sell_price": 15630,
+    "cost_price": 13400
+  },
+  {
+    "month": "2025-03",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 519,
+    "revenue": 9248580,
+    "sell_price": 17820,
+    "cost_price": 15300
+  },
+  {
+    "month": "2025-03",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 347,
+    "revenue": 7182900,
+    "sell_price": 20700,
+    "cost_price": 17900
+  },
+  {
+    "month": "2025-03",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1341,
+    "revenue": 1823760,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-03",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 950,
+    "revenue": 1672000,
+    "sell_price": 1760,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-03",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 766,
+    "revenue": 1823080,
+    "sell_price": 2380,
+    "cost_price": 1700
+  },
+  {
+    "month": "2025-04",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 647,
+    "revenue": 10313180,
+    "sell_price": 15940,
+    "cost_price": 13700
+  },
+  {
+    "month": "2025-04",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 342,
+    "revenue": 6094440,
+    "sell_price": 17820,
+    "cost_price": 15400
+  },
+  {
+    "month": "2025-04",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 225,
+    "revenue": 4657500,
+    "sell_price": 20700,
+    "cost_price": 17650
+  },
+  {
+    "month": "2025-04",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 972,
+    "revenue": 1321920,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-04",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 794,
+    "revenue": 1397440,
+    "sell_price": 1760,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-04",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 590,
+    "revenue": 1404200,
+    "sell_price": 2380,
+    "cost_price": 1700
+  },
+  {
+    "month": "2025-05",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 535,
+    "revenue": 8527900,
+    "sell_price": 15940,
+    "cost_price": 13900
+  },
+  {
+    "month": "2025-05",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 326,
+    "revenue": 5809320,
+    "sell_price": 17820,
+    "cost_price": 15400
+  },
+  {
+    "month": "2025-05",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 264,
+    "revenue": 5464800,
+    "sell_price": 20700,
+    "cost_price": 17650
+  },
+  {
+    "month": "2025-05",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1079,
+    "revenue": 1467440,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-05",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 844,
+    "revenue": 1485440,
+    "sell_price": 1760,
+    "cost_price": 1250
+  },
+  {
+    "month": "2025-05",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 524,
+    "revenue": 1283800,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-06",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 654,
+    "revenue": 10424760,
+    "sell_price": 15940,
+    "cost_price": 13850
+  },
+  {
+    "month": "2025-06",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 312,
+    "revenue": 5640960,
+    "sell_price": 18080,
+    "cost_price": 15700
+  },
+  {
+    "month": "2025-06",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 219,
+    "revenue": 4533300,
+    "sell_price": 20700,
+    "cost_price": 17300
+  },
+  {
+    "month": "2025-06",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1029,
+    "revenue": 1399440,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-06",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 736,
+    "revenue": 1295360,
+    "sell_price": 1760,
+    "cost_price": 1250
+  },
+  {
+    "month": "2025-06",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 563,
+    "revenue": 1379350,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-07",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 581,
+    "revenue": 9261140,
+    "sell_price": 15940,
+    "cost_price": 14000
+  },
+  {
+    "month": "2025-07",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 365,
+    "revenue": 6599200,
+    "sell_price": 18080,
+    "cost_price": 15750
+  },
+  {
+    "month": "2025-07",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 211,
+    "revenue": 4367700,
+    "sell_price": 20700,
+    "cost_price": 17950
+  },
+  {
+    "month": "2025-07",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 903,
+    "revenue": 1228080,
+    "sell_price": 1360,
+    "cost_price": 1000
+  },
+  {
+    "month": "2025-07",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 837,
+    "revenue": 1473120,
+    "sell_price": 1760,
+    "cost_price": 1250
+  },
+  {
+    "month": "2025-07",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 507,
+    "revenue": 1242150,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-08",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 644,
+    "revenue": 10265360,
+    "sell_price": 15940,
+    "cost_price": 13800
+  },
+  {
+    "month": "2025-08",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 378,
+    "revenue": 6834240,
+    "sell_price": 18080,
+    "cost_price": 15450
+  },
+  {
+    "month": "2025-08",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 268,
+    "revenue": 5547600,
+    "sell_price": 20700,
+    "cost_price": 17400
+  },
+  {
+    "month": "2025-08",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 919,
+    "revenue": 1314170,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2025-08",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 731,
+    "revenue": 1286560,
+    "sell_price": 1760,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-08",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 505,
+    "revenue": 1237250,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-09",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 701,
+    "revenue": 11173940,
+    "sell_price": 15940,
+    "cost_price": 13650
+  },
+  {
+    "month": "2025-09",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 383,
+    "revenue": 6924640,
+    "sell_price": 18080,
+    "cost_price": 15550
+  },
+  {
+    "month": "2025-09",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 232,
+    "revenue": 4802400,
+    "sell_price": 20700,
+    "cost_price": 17900
+  },
+  {
+    "month": "2025-09",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 884,
+    "revenue": 1264120,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2025-09",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 759,
+    "revenue": 1335840,
+    "sell_price": 1760,
+    "cost_price": 1250
+  },
+  {
+    "month": "2025-09",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 475,
+    "revenue": 1163750,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-10",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 607,
+    "revenue": 9918380,
+    "sell_price": 16340,
+    "cost_price": 14350
+  },
+  {
+    "month": "2025-10",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 417,
+    "revenue": 7539360,
+    "sell_price": 18080,
+    "cost_price": 15450
+  },
+  {
+    "month": "2025-10",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 271,
+    "revenue": 5609700,
+    "sell_price": 20700,
+    "cost_price": 17350
+  },
+  {
+    "month": "2025-10",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 914,
+    "revenue": 1307020,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2025-10",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 724,
+    "revenue": 1310440,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-10",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 504,
+    "revenue": 1234800,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-11",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 567,
+    "revenue": 9264780,
+    "sell_price": 16340,
+    "cost_price": 14050
+  },
+  {
+    "month": "2025-11",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 376,
+    "revenue": 6798080,
+    "sell_price": 18080,
+    "cost_price": 15400
+  },
+  {
+    "month": "2025-11",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 243,
+    "revenue": 5030100,
+    "sell_price": 20700,
+    "cost_price": 17450
+  },
+  {
+    "month": "2025-11",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1051,
+    "revenue": 1502930,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2025-11",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 786,
+    "revenue": 1422660,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-11",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 550,
+    "revenue": 1347500,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2025-12",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 646,
+    "revenue": 10555640,
+    "sell_price": 16340,
+    "cost_price": 14150
+  },
+  {
+    "month": "2025-12",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 424,
+    "revenue": 7665920,
+    "sell_price": 18080,
+    "cost_price": 15550
+  },
+  {
+    "month": "2025-12",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 280,
+    "revenue": 5796000,
+    "sell_price": 20700,
+    "cost_price": 17600
+  },
+  {
+    "month": "2025-12",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1084,
+    "revenue": 1550120,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2025-12",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 974,
+    "revenue": 1762940,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2025-12",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 682,
+    "revenue": 1670900,
+    "sell_price": 2450,
+    "cost_price": 1750
+  },
+  {
+    "month": "2026-01",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 564,
+    "revenue": 9215760,
+    "sell_price": 16340,
+    "cost_price": 14350
+  },
+  {
+    "month": "2026-01",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 365,
+    "revenue": 6599200,
+    "sell_price": 18080,
+    "cost_price": 15750
+  },
+  {
+    "month": "2026-01",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 217,
+    "revenue": 4580870,
+    "sell_price": 21110,
+    "cost_price": 18200
+  },
+  {
+    "month": "2026-01",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 856,
+    "revenue": 1224080,
+    "sell_price": 1430,
+    "cost_price": 1100
+  },
+  {
+    "month": "2026-01",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 764,
+    "revenue": 1382840,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2026-01",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 543,
+    "revenue": 1330350,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2026-02",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 1001,
+    "revenue": 16356340,
+    "sell_price": 16340,
+    "cost_price": 14250
+  },
+  {
+    "month": "2026-02",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 452,
+    "revenue": 8172160,
+    "sell_price": 18080,
+    "cost_price": 15750
+  },
+  {
+    "month": "2026-02",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 323,
+    "revenue": 6818530,
+    "sell_price": 21110,
+    "cost_price": 18250
+  },
+  {
+    "month": "2026-02",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1487,
+    "revenue": 2126410,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2026-02",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 1009,
+    "revenue": 1826290,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2026-02",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 765,
+    "revenue": 1874250,
+    "sell_price": 2450,
+    "cost_price": 1800
+  },
+  {
+    "month": "2026-03",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 920,
+    "revenue": 15032800,
+    "sell_price": 16340,
+    "cost_price": 14300
+  },
+  {
+    "month": "2026-03",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 463,
+    "revenue": 8371040,
+    "sell_price": 18080,
+    "cost_price": 15300
+  },
+  {
+    "month": "2026-03",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 367,
+    "revenue": 7747370,
+    "sell_price": 21110,
+    "cost_price": 17800
+  },
+  {
+    "month": "2026-03",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1162,
+    "revenue": 1661660,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2026-03",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 983,
+    "revenue": 1779230,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2026-03",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 684,
+    "revenue": 1744200,
+    "sell_price": 2550,
+    "cost_price": 1850
+  },
+  {
+    "month": "2026-04",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 686,
+    "revenue": 11209240,
+    "sell_price": 16340,
+    "cost_price": 14300
+  },
+  {
+    "month": "2026-04",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 361,
+    "revenue": 6526880,
+    "sell_price": 18080,
+    "cost_price": 15750
+  },
+  {
+    "month": "2026-04",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 265,
+    "revenue": 5594150,
+    "sell_price": 21110,
+    "cost_price": 17900
+  },
+  {
+    "month": "2026-04",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 846,
+    "revenue": 1209780,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2026-04",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 821,
+    "revenue": 1486010,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2026-04",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 482,
+    "revenue": 1229100,
+    "sell_price": 2550,
+    "cost_price": 1850
+  },
+  {
+    "month": "2026-05",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 607,
+    "revenue": 9918380,
+    "sell_price": 16340,
+    "cost_price": 14250
+  },
+  {
+    "month": "2026-05",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 337,
+    "revenue": 6278310,
+    "sell_price": 18630,
+    "cost_price": 16300
+  },
+  {
+    "month": "2026-05",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 265,
+    "revenue": 5594150,
+    "sell_price": 21110,
+    "cost_price": 17850
+  },
+  {
+    "month": "2026-05",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1004,
+    "revenue": 1435720,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2026-05",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 780,
+    "revenue": 1411800,
+    "sell_price": 1810,
+    "cost_price": 1300
+  },
+  {
+    "month": "2026-05",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 544,
+    "revenue": 1387200,
+    "sell_price": 2550,
+    "cost_price": 1850
+  },
+  {
+    "month": "2026-06",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 761,
+    "revenue": 12434740,
+    "sell_price": 16340,
+    "cost_price": 14300
+  },
+  {
+    "month": "2026-06",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 355,
+    "revenue": 6613650,
+    "sell_price": 18630,
+    "cost_price": 16300
+  },
+  {
+    "month": "2026-06",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 245,
+    "revenue": 5069050,
+    "sell_price": 20690,
+    "cost_price": 17650
+  },
+  {
+    "month": "2026-06",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 1013,
+    "revenue": 1448590,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2026-06",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 850,
+    "revenue": 1632000,
+    "sell_price": 1920,
+    "cost_price": 1350
+  },
+  {
+    "month": "2026-06",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 568,
+    "revenue": 1448400,
+    "sell_price": 2550,
+    "cost_price": 1850
+  },
+  {
+    "month": "2026-07",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 638,
+    "revenue": 10839620,
+    "sell_price": 16990,
+    "cost_price": 15000
+  },
+  {
+    "month": "2026-07",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 338,
+    "revenue": 6296940,
+    "sell_price": 18630,
+    "cost_price": 16100
+  },
+  {
+    "month": "2026-07",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 252,
+    "revenue": 5213880,
+    "sell_price": 20690,
+    "cost_price": 17300
+  },
+  {
+    "month": "2026-07",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 899,
+    "revenue": 1285570,
+    "sell_price": 1430,
+    "cost_price": 1050
+  },
+  {
+    "month": "2026-07",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 749,
+    "revenue": 1438080,
+    "sell_price": 1920,
+    "cost_price": 1400
+  },
+  {
+    "month": "2026-07",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 495,
+    "revenue": 1262250,
+    "sell_price": 2550,
+    "cost_price": 1850
+  },
+  {
+    "month": "2026-08",
+    "sku": "OIL-001",
+    "name": "Kita - 1L",
+    "qty_pcs": 620,
+    "revenue": 10850000,
+    "sell_price": 17500,
+    "cost_price": 15200
+  },
+  {
+    "month": "2026-08",
+    "sku": "OIL-002",
+    "name": "Albisco - 1L",
+    "qty_pcs": 380,
+    "revenue": 7220000,
+    "sell_price": 19000,
+    "cost_price": 16600
+  },
+  {
+    "month": "2026-08",
+    "sku": "OIL-003",
+    "name": "Tropical - 1L",
+    "qty_pcs": 278,
+    "revenue": 5838000,
+    "sell_price": 21000,
+    "cost_price": 17800
+  },
+  {
+    "month": "2026-08",
+    "sku": "SPICE-001",
+    "name": "Sajiku Nasi Goreng",
+    "qty_pcs": 983,
+    "revenue": 1474500,
+    "sell_price": 1500,
+    "cost_price": 1150
+  },
+  {
+    "month": "2026-08",
+    "sku": "SPICE-002",
+    "name": "Sajiku Ayam Goreng",
+    "qty_pcs": 708,
+    "revenue": 1416000,
+    "sell_price": 2000,
+    "cost_price": 1400
+  },
+  {
+    "month": "2026-08",
+    "sku": "SPICE-003",
+    "name": "Sajiku Serbaguna",
+    "qty_pcs": 489,
+    "revenue": 1222500,
+    "sell_price": 2500,
+    "cost_price": 1800
+  }
+]

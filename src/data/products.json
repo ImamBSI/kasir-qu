@@ -6,17 +6,11 @@
     "category": "Minyak Goreng Sawit",
     "image": "/images/minyak-kita.webp",
     "stock_pcs": 10,
+    "cost_price": 15200,
+    "min_stock": 20,
     "units": [
-      {
-        "satuan": "Pcs",
-        "isi_dalam_satuan_dasar": 1,
-        "price": 17500
-      },
-      {
-        "satuan": "Dus",
-        "isi_dalam_satuan_dasar": 12,
-        "price": 200000
-      }
+      { "satuan": "Pcs", "isi_dalam_satuan_dasar": 1, "price": 17500 },
+      { "satuan": "Dus", "isi_dalam_satuan_dasar": 12, "price": 200000 }
     ]
   },
   {
@@ -26,17 +20,11 @@
     "category": "Minyak Goreng Sawit",
     "image": "/images/albisco.webp",
     "stock_pcs": 48,
+    "cost_price": 16500,
+    "min_stock": 20,
     "units": [
-      {
-        "satuan": "Pcs",
-        "isi_dalam_satuan_dasar": 1,
-        "price": 19000
-      },
-      {
-        "satuan": "Dus",
-        "isi_dalam_satuan_dasar": 12,
-        "price": 220000
-      }
+      { "satuan": "Pcs", "isi_dalam_satuan_dasar": 1, "price": 19000 },
+      { "satuan": "Dus", "isi_dalam_satuan_dasar": 12, "price": 220000 }
     ]
   },
   {
@@ -46,17 +34,11 @@
     "category": "Minyak Goreng Sawit",
     "image": "/images/tropical-1lt.webp",
     "stock_pcs": 36,
+    "cost_price": 18200,
+    "min_stock": 15,
     "units": [
-      {
-        "satuan": "Pcs",
-        "isi_dalam_satuan_dasar": 1,
-        "price": 21000
-      },
-      {
-        "satuan": "Dus",
-        "isi_dalam_satuan_dasar": 12,
-        "price": 245000
-      }
+      { "satuan": "Pcs", "isi_dalam_satuan_dasar": 1, "price": 21000 },
+      { "satuan": "Dus", "isi_dalam_satuan_dasar": 12, "price": 245000 }
     ]
   },
   {
@@ -65,23 +47,13 @@
     "sku": "SPICE-001",
     "category": "Bumbu Dapur",
     "image": "/images/sajiku.webp",
-    "stock_pcs": 120, 
+    "stock_pcs": 120,
+    "cost_price": 1050,
+    "min_stock": 50,
     "units": [
-      {
-        "satuan": "Pcs",
-        "isi_dalam_satuan_dasar": 1,
-        "price": 1500
-      },
-      {
-        "satuan": "Rcg",
-        "isi_dalam_satuan_dasar": 10,
-        "price": 14000
-      },
-      {
-        "satuan": "Dus",
-        "isi_dalam_satuan_dasar": 60,
-        "price": 80000
-      }
+      { "satuan": "Pcs", "isi_dalam_satuan_dasar": 1, "price": 1500 },
+      { "satuan": "Rcg", "isi_dalam_satuan_dasar": 10, "price": 14000 },
+      { "satuan": "Dus", "isi_dalam_satuan_dasar": 60, "price": 80000 }
     ]
   },
   {
@@ -90,23 +62,13 @@
     "sku": "SPICE-002",
     "category": "Bumbu Dapur",
     "image": "/images/sajiku2.webp",
-    "stock_pcs": 100, 
+    "stock_pcs": 100,
+    "cost_price": 1400,
+    "min_stock": 40,
     "units": [
-      {
-        "satuan": "Pcs",
-        "isi_dalam_satuan_dasar": 1,
-        "price": 2000
-      },
-      {
-        "satuan": "Rcg",
-        "isi_dalam_satuan_dasar": 10,
-        "price": 18000
-      },
-      {
-        "satuan": "Dus",
-        "isi_dalam_satuan_dasar": 60,
-        "price": 100000
-      }
+      { "satuan": "Pcs", "isi_dalam_satuan_dasar": 1, "price": 2000 },
+      { "satuan": "Rcg", "isi_dalam_satuan_dasar": 10, "price": 18000 },
+      { "satuan": "Dus", "isi_dalam_satuan_dasar": 60, "price": 100000 }
     ]
   },
   {
@@ -115,23 +77,13 @@
     "sku": "SPICE-003",
     "category": "Bumbu Dapur",
     "image": "/images/sajiku3.webp",
-    "stock_pcs": 80, 
+    "stock_pcs": 80,
+    "cost_price": 1800,
+    "min_stock": 40,
     "units": [
-      {
-        "satuan": "Pcs",
-        "isi_dalam_satuan_dasar": 1,
-        "price": 2500
-      },
-      {
-        "satuan": "Rcg",
-        "isi_dalam_satuan_dasar": 10,
-        "price": 22000
-      },
-      {
-        "satuan": "Dus",
-        "isi_dalam_satuan_dasar": 60,
-        "price": 120000
-      }
+      { "satuan": "Pcs", "isi_dalam_satuan_dasar": 1, "price": 2500 },
+      { "satuan": "Rcg", "isi_dalam_satuan_dasar": 10, "price": 22000 },
+      { "satuan": "Dus", "isi_dalam_satuan_dasar": 60, "price": 120000 }
     ]
   }
 ]

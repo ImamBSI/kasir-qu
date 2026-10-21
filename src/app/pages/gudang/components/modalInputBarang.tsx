@@ -9,6 +9,7 @@ interface ModalInputBarangProps {
   onSave: (product: {
     name: string;
     category: string;
+    cost_price: number;
     units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
   }) => void;
 }
@@ -16,6 +17,7 @@ interface ModalInputBarangProps {
 export default function ModalInputBarang({ categories, onClose, onSave }: ModalInputBarangProps) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const [costPrice, setCostPrice] = useState(0);
   const [pcsPrice, setPcsPrice] = useState(0);
   const [rcgPrice, setRcgPrice] = useState(0);
   const [rcgIsi, setRcgIsi] = useState(0);
@@ -31,7 +33,7 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
       units.push({ satuan: "Dus", price: dusPrice, isi_dalam_satuan_dasar: dusIsi });
     }
 
-    onSave({ name, category, units });
+    onSave({ name, category, cost_price: costPrice, units });
     onClose();
   };
 
@@ -91,6 +93,29 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
               Harga & Konversi Satuan
             </label>
             <div className="space-y-3">
+              {/* HARGA BELI */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  HARGA BELI PER PCS (MODAL)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                    Rp
+                  </span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    value={costPrice || ""}
+                    onChange={(e) => setCostPrice(parseInt(e.target.value, 10) || 0)}
+                    placeholder="0"
+                    className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-500">
+                  Dipakai untuk menghitung laba kotor di halaman laporan.
+                </p>
+              </div>
+
               {/* PCS */}
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">

@@ -1,0 +1,218 @@
+[
+  {
+    "month": "2024-09",
+    "revenue": 24787590,
+    "transactions": 339,
+    "items_sold": 3420,
+    "stock_in_pcs": 3144,
+    "stock_out_pcs": 3435,
+    "gross_profit": 4083690
+  },
+  {
+    "month": "2024-10",
+    "revenue": 23379440,
+    "transactions": 371,
+    "items_sold": 3303,
+    "stock_in_pcs": 3470,
+    "stock_out_pcs": 3320,
+    "gross_profit": 3661190
+  },
+  {
+    "month": "2024-11",
+    "revenue": 24212510,
+    "transactions": 383,
+    "items_sold": 3407,
+    "stock_in_pcs": 3528,
+    "stock_out_pcs": 3438,
+    "gross_profit": 3891760
+  },
+  {
+    "month": "2024-12",
+    "revenue": 28780760,
+    "transactions": 373,
+    "items_sold": 3852,
+    "stock_in_pcs": 4369,
+    "stock_out_pcs": 3909,
+    "gross_profit": 4444510
+  },
+  {
+    "month": "2025-01",
+    "revenue": 23901930,
+    "transactions": 410,
+    "items_sold": 3266,
+    "stock_in_pcs": 3426,
+    "stock_out_pcs": 3286,
+    "gross_profit": 3917930
+  },
+  {
+    "month": "2025-02",
+    "revenue": 26330630,
+    "transactions": 363,
+    "items_sold": 3635,
+    "stock_in_pcs": 4131,
+    "stock_out_pcs": 3668,
+    "gross_profit": 3983780
+  },
+  {
+    "month": "2025-03",
+    "revenue": 36848900,
+    "transactions": 480,
+    "items_sold": 4889,
+    "stock_in_pcs": 5359,
+    "stock_out_pcs": 4976,
+    "gross_profit": 5874300
+  },
+  {
+    "month": "2025-04",
+    "revenue": 25188680,
+    "transactions": 340,
+    "items_sold": 3570,
+    "stock_in_pcs": 3353,
+    "stock_out_pcs": 3609,
+    "gross_profit": 4079530
+  },
+  {
+    "month": "2025-05",
+    "revenue": 24038700,
+    "transactions": 409,
+    "items_sold": 3572,
+    "stock_in_pcs": 3445,
+    "stock_out_pcs": 3609,
+    "gross_profit": 3845000
+  },
+  {
+    "month": "2025-06",
+    "revenue": 24673170,
+    "transactions": 403,
+    "items_sold": 3513,
+    "stock_in_pcs": 3360,
+    "stock_out_pcs": 3537,
+    "gross_profit": 3965770
+  },
+  {
+    "month": "2025-07",
+    "revenue": 24171390,
+    "transactions": 320,
+    "items_sold": 3404,
+    "stock_in_pcs": 3854,
+    "stock_out_pcs": 3465,
+    "gross_profit": 3639340
+  },
+  {
+    "month": "2025-08",
+    "revenue": 26485180,
+    "transactions": 383,
+    "items_sold": 3445,
+    "stock_in_pcs": 3793,
+    "stock_out_pcs": 3498,
+    "gross_profit": 4270430
+  },
+  {
+    "month": "2025-09",
+    "revenue": 26664690,
+    "transactions": 385,
+    "items_sold": 3434,
+    "stock_in_pcs": 3796,
+    "stock_out_pcs": 3493,
+    "gross_profit": 4255640
+  },
+  {
+    "month": "2025-10",
+    "revenue": 26919700,
+    "transactions": 409,
+    "items_sold": 3437,
+    "stock_in_pcs": 3611,
+    "stock_out_pcs": 3456,
+    "gross_profit": 4256650
+  },
+  {
+    "month": "2025-11",
+    "revenue": 25366050,
+    "transactions": 360,
+    "items_sold": 3573,
+    "stock_in_pcs": 3929,
+    "stock_out_pcs": 3588,
+    "gross_profit": 4253600
+  },
+  {
+    "month": "2025-12",
+    "revenue": 29001520,
+    "transactions": 380,
+    "items_sold": 4090,
+    "stock_in_pcs": 4059,
+    "stock_out_pcs": 4125,
+    "gross_profit": 4741520
+  },
+  {
+    "month": "2026-01",
+    "revenue": 24333100,
+    "transactions": 357,
+    "items_sold": 3309,
+    "stock_in_pcs": 3391,
+    "stock_out_pcs": 3355,
+    "gross_profit": 3629350
+  },
+  {
+    "month": "2026-02",
+    "revenue": 37173980,
+    "transactions": 531,
+    "items_sold": 5037,
+    "stock_in_pcs": 5549,
+    "stock_out_pcs": 5100,
+    "gross_profit": 5645930
+  },
+  {
+    "month": "2026-03",
+    "revenue": 36336300,
+    "transactions": 585,
+    "items_sold": 4579,
+    "stock_in_pcs": 4328,
+    "stock_out_pcs": 4645,
+    "gross_profit": 5800400
+  },
+  {
+    "month": "2026-04",
+    "revenue": 27255160,
+    "transactions": 388,
+    "items_sold": 3461,
+    "stock_in_pcs": 3517,
+    "stock_out_pcs": 3496,
+    "gross_profit": 4168810
+  },
+  {
+    "month": "2026-05",
+    "revenue": 26025560,
+    "transactions": 373,
+    "items_sold": 3537,
+    "stock_in_pcs": 3897,
+    "stock_out_pcs": 3552,
+    "gross_profit": 4077860
+  },
+  {
+    "month": "2026-06",
+    "revenue": 28646430,
+    "transactions": 473,
+    "items_sold": 3792,
+    "stock_in_pcs": 4132,
+    "stock_out_pcs": 3859,
+    "gross_profit": 4391430
+  },
+  {
+    "month": "2026-07",
+    "revenue": 26336340,
+    "transactions": 436,
+    "items_sold": 3371,
+    "stock_in_pcs": 3609,
+    "stock_out_pcs": 3425,
+    "gross_profit": 4056640
+  },
+  {
+    "month": "2026-08",
+    "revenue": 28021000,
+    "transactions": 389,
+    "items_sold": 3458,
+    "stock_in_pcs": 3354,
+    "stock_out_pcs": 3518,
+    "gross_profit": 4338750
+  }
+]

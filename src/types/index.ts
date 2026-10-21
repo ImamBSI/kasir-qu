@@ -11,6 +11,8 @@ export interface Product {
   category: string;
   image: string;
   stock_pcs: number;
+  cost_price?: number;
+  min_stock?: number;
   units: ProductUnit[];
 }
 
@@ -37,4 +39,24 @@ export interface Order {
   customer_name: string | null;
   total_price: number;
   items: OrderItem[];
+}
+
+export interface MonthlyReport {
+  month: string;
+  revenue: number;
+  transactions: number;
+  items_sold: number;
+  stock_in_pcs: number;
+  stock_out_pcs: number;
+  gross_profit: number;
+}
+
+export interface ProductMonthlyReport {
+  month: string;
+  sku: string;
+  name: string;
+  qty_pcs: number;
+  revenue: number;
+  sell_price: number;
+  cost_price: number;
 }

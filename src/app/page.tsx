@@ -265,7 +265,7 @@ export default function DashboardPage() {
             </div>
 
             <button
-              onClick={() => router.push("/pages/analisa")}
+              onClick={() => router.push("/pages/laporan")}
               className="w-full py-2.5 bg-white text-blue-700 rounded-md text-sm font-medium hover:bg-gray-100 cursor-pointer"
             >
               View Detailed Report

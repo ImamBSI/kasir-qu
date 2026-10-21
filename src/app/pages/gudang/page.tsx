@@ -10,6 +10,12 @@ import {
 import productsData from "@/data/products.json";
 import type { Product, ProductUnit } from "@/types";
 import { formatCurrency } from "@/utils/format";
+import {
+  getMinStock,
+  getUnitStock,
+  isLowStock,
+  isOutOfStock,
+} from "@/utils/stock";
 import ModalEditBarang from "./components/modalEditBarang";
 import ModalInputBarang from "./components/modalInputBarang";
 
@@ -71,6 +77,7 @@ export default function GudangPage() {
   const handleAddProduct = (newProduct: {
     name: string;
     category: string;
+    cost_price: number;
     units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
   }) => {
     const maxId = products.reduce((max, p) => Math.max(max, p.id), 0);
@@ -79,15 +86,17 @@ export default function GudangPage() {
       name: newProduct.name,
       sku: `SKU-${maxId + 1}`,
       category: newProduct.category,
-      image: "/images/default.webp",
+      image: "/images/placeholder.svg",
       stock_pcs: 0,
+      cost_price: newProduct.cost_price,
+      min_stock: 10,
       units: newProduct.units,
     };
     setProducts((prev) => [...prev, product]);
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6">
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">Inventory</h1>
@@ -140,16 +149,17 @@ export default function GudangPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div className="shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden">
         {/* Mobile card list */}
         <div className="md:hidden divide-y divide-gray-200">
           {paginatedProducts.map((product) => {
             const selectedUnitIndex = selectedUnits[product.id] ?? 0;
-            const currentUnit = product.units[selectedUnitIndex] ?? product.units[0];
-            const displayStock = Math.floor(
-              product.stock_pcs / currentUnit.isi_dalam_satuan_dasar,
-            );
-            const isLowStock = displayStock < 20;
+            const currentUnit =
+              product.units[selectedUnitIndex] ?? product.units[0];
+            const displayStock = getUnitStock(product, currentUnit);
+            const minStock = getMinStock(product);
+            const outOfStock = isOutOfStock(product);
+            const lowStock = isLowStock(product);
             return (
               <div key={product.id} className="flex gap-3 p-3">
                 <div className="w-14 h-14 shrink-0 bg-gray-100 rounded overflow-hidden">
@@ -190,12 +200,26 @@ export default function GudangPage() {
                 <div className="flex flex-col items-end justify-between shrink-0">
                   <div className="text-right">
                     <p
-                      className={`text-sm font-semibold ${isLowStock ? "text-red-600" : "text-gray-900"}`}
+                      className={`text-sm font-semibold ${
+                        outOfStock || lowStock
+                          ? "text-red-600"
+                          : "text-gray-900"
+                      }`}
                     >
                       {displayStock}
                     </p>
-                    {isLowStock && (
-                      <p className="text-[10px] text-red-500">Low Stock</p>
+                    {outOfStock ? (
+                      <p className="text-[10px] font-medium text-red-600">
+                        Habis
+                      </p>
+                    ) : lowStock ? (
+                      <p className="text-[10px] text-red-500">
+                        Stok menipis
+                      </p>
+                    ) : (
+                      <p className="text-[10px] text-gray-400">
+                        min {minStock}
+                      </p>
                     )}
                   </div>
                   <button
@@ -239,10 +263,10 @@ export default function GudangPage() {
                 const selectedUnitIndex = selectedUnits[product.id] ?? 0;
                 const currentUnit =
                   product.units[selectedUnitIndex] ?? product.units[0];
-                const displayStock = Math.floor(
-                  product.stock_pcs / currentUnit.isi_dalam_satuan_dasar,
-                );
-                const isLowStock = displayStock < 20;
+                const displayStock = getUnitStock(product, currentUnit);
+                const minStock = getMinStock(product);
+                const outOfStock = isOutOfStock(product);
+                const lowStock = isLowStock(product);
                 return (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
@@ -323,13 +347,25 @@ export default function GudangPage() {
                     <td className="px-4 py-3 text-right">
                       <div className="flex flex-col items-end">
                         <span
-                          className={`text-sm font-semibold ${isLowStock ? "text-red-600" : "text-gray-900"}`}
+                          className={`text-sm font-semibold ${
+                            outOfStock || lowStock
+                              ? "text-red-600"
+                              : "text-gray-900"
+                          }`}
                         >
                           {displayStock}
                         </span>
-                        {isLowStock && (
+                        {outOfStock ? (
+                          <span className="text-[10px] font-medium text-red-600">
+                            Habis
+                          </span>
+                        ) : lowStock ? (
                           <span className="text-[10px] text-red-500">
-                            Low Stock
+                            Stok menipis
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-gray-400">
+                            min {minStock}
                           </span>
                         )}
                       </div>

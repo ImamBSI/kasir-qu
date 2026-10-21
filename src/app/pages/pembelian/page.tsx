@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Search, ShoppingCart, Minus, Plus, Trash, X } from "lucide-react";
 import productsData from "@/data/products.json";
 import type { CartItem, Product, ProductUnit } from "@/types";
+import { getUnitStock, isOutOfStock } from "@/utils/stock";
 
 export default function PembelianPage() {
   const products = productsData as Product[];
@@ -57,15 +58,25 @@ export default function PembelianPage() {
     return product.units[unitIndex] ?? product.units[0];
   };
 
+  const getAvailableStock = (productId: number, satuan: string) => {
+    const product = products.find((p) => p.id === productId);
+    const unit = product?.units.find((u) => u.satuan === satuan);
+    return product && unit ? getUnitStock(product, unit) : 0;
+  };
+
   const addToCart = (product: Product) => {
     const unit = getSelectedUnit(product.id);
     if (!unit) return;
+
+    const available = getUnitStock(product, unit);
+    if (available <= 0) return;
 
     setCart((prev) => {
       const existing = prev.find(
         (item) => item.id === product.id && item.unit.satuan === unit.satuan,
       );
       if (existing) {
+        if (existing.quantity >= available) return prev;
         return prev.map((item) =>
           item.id === product.id && item.unit.satuan === unit.satuan
             ? { ...item, quantity: item.quantity + 1 }
@@ -86,11 +97,18 @@ export default function PembelianPage() {
   };
 
   const updateQuantity = (id: number, satuan: string, delta: number) => {
+    const available = getAvailableStock(id, satuan);
     setCart((prev) =>
       prev
         .map((item) =>
           item.id === id && item.unit.satuan === satuan
-            ? { ...item, quantity: Math.max(0, item.quantity + delta) }
+            ? {
+                ...item,
+                quantity: Math.min(
+                  available,
+                  Math.max(0, item.quantity + delta),
+                ),
+              }
             : item,
         )
         .filter((item) => item.quantity > 0),
@@ -104,13 +122,17 @@ export default function PembelianPage() {
   const handleQtyBlur = (id: number, satuan: string) => {
     const key = `${id}-${satuan}`;
     const qty = parseInt(editQty[key], 10);
-    if (!isNaN(qty) && qty > 0) {
+    const available = getAvailableStock(id, satuan);
+    if (!isNaN(qty)) {
+      const clamped = Math.min(Math.max(0, qty), available);
       setCart((prev) =>
-        prev.map((item) =>
-          item.id === id && item.unit.satuan === satuan
-            ? { ...item, quantity: qty }
-            : item,
-        ),
+        prev
+          .map((item) =>
+            item.id === id && item.unit.satuan === satuan
+              ? { ...item, quantity: clamped }
+              : item,
+          )
+          .filter((item) => item.quantity > 0),
       );
     }
     setEditQty((prev) => {
@@ -183,52 +205,91 @@ export default function PembelianPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-2">
             {filteredProducts.map((product) => {
               const unitIndex = selectedUnits[product.id] ?? 0;
-              const currentUnit = product.units[unitIndex];
+              const currentUnit = product.units[unitIndex] ?? product.units[0];
+              const available = getUnitStock(product, currentUnit);
+              const empty = isOutOfStock(product);
+              const inCart =
+                cart.find(
+                  (item) =>
+                    item.id === product.id &&
+                    item.unit.satuan === currentUnit.satuan,
+                )?.quantity ?? 0;
+              const reachedLimit = available > 0 && inCart >= available;
+
               return (
                 <div
                   key={product.id}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                  className={`relative bg-white border border-gray-200 rounded-lg overflow-hidden transition-shadow ${
+                    empty ? "opacity-70" : "hover:shadow-md"
+                  }`}
                 >
-                  <div className="aspect-square bg-gray-100">
+                  <div className="relative aspect-square bg-gray-100">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-cover"
+                      className={`w-full h-full object-cover ${empty ? "grayscale" : ""}`}
                     />
+                    {empty && (
+                      <span className="absolute left-1.5 top-1.5 rounded bg-red-600 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                        Habis
+                      </span>
+                    )}
                   </div>
-                  <div className="p-2">
-                    <h3 className="font-semibold text-gray-900 text-xs mb-0.5 truncate">
+                  <div className="p-2.5">
+                    <h3 className="font-semibold text-gray-900 text-sm mb-0.5 truncate">
                       {product.name}
                     </h3>
-                    <p className="text-[10px] text-gray-500 mb-1">
+                    <p className="text-[11px] text-gray-500">
                       SKU: {product.sku}
+                    </p>
+                    <p
+                      className={`text-[11px] mb-1.5 ${
+                        empty || available === 0
+                          ? "text-red-600 font-medium"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {empty
+                        ? "Stok habis"
+                        : available === 0
+                          ? `Stok ${currentUnit.satuan} habis`
+                          : `Sisa ${available} ${currentUnit.satuan}`}
                     </p>
 
                     {/* Unit Selector */}
-                    <div className="flex gap-0.5 mb-1.5">
-                      {product.units.map((unit, idx) => (
-                        <button
-                          key={unit.satuan}
-                          onClick={() =>
-                            setSelectedUnits((prev) => ({
-                              ...prev,
-                              [product.id]: idx,
-                            }))
-                          }
-                          className={`flex-1 py-0.5 px-1 text-[10px] rounded border transition-colors ${
-                            unitIndex === idx
-                              ? "bg-blue-700 text-white border-blue-700"
-                              : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
-                          }`}
-                        >
-                          {unit.satuan}
-                        </button>
-                      ))}
+                    <div className="flex gap-0.5 mb-2">
+                      {product.units.map((unit, idx) => {
+                        const unitStock = getUnitStock(product, unit);
+                        return (
+                          <button
+                            key={unit.satuan}
+                            onClick={() =>
+                              setSelectedUnits((prev) => ({
+                                ...prev,
+                                [product.id]: idx,
+                              }))
+                            }
+                            disabled={unitStock === 0}
+                            title={
+                              unitStock === 0
+                                ? `Stok ${unit.satuan} habis`
+                                : undefined
+                            }
+                            className={`flex-1 py-1.5 px-1 text-[11px] rounded border transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                              unitIndex === idx
+                                ? "bg-blue-700 text-white border-blue-700"
+                                : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
+                            }`}
+                          >
+                            {unit.satuan}
+                          </button>
+                        );
+                      })}
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-blue-700 font-bold text-xs">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <span className="text-blue-700 font-bold text-sm">
                           {formatCurrency(currentUnit.price)}
                         </span>
                         <span className="text-[10px] text-gray-500">
@@ -237,12 +298,22 @@ export default function PembelianPage() {
                       </div>
                       <button
                         onClick={() => addToCart(product)}
-                        aria-label={`Tambah ${product.name}`}
-                        className="w-9 h-9 md:w-7 md:h-7 bg-gray-100 hover:bg-blue-700 hover:text-white rounded-full flex items-center justify-center transition-colors"
+                        disabled={empty || available === 0 || reachedLimit}
+                        aria-label={
+                          reachedLimit
+                            ? `Stok ${product.name} sudah maksimal di keranjang`
+                            : `Tambah ${product.name}`
+                        }
+                        className="w-9 h-9 md:w-8 md:h-8 shrink-0 bg-gray-100 hover:bg-blue-700 hover:text-white rounded-full flex items-center justify-center transition-colors disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-gray-100"
                       >
                         <Plus className="size-4" />
                       </button>
                     </div>
+                    {reachedLimit && (
+                      <p className="mt-1 text-[10px] text-amber-600">
+                        Maksimal di keranjang
+                      </p>
+                    )}
                   </div>
                 </div>
               );
@@ -312,6 +383,7 @@ export default function PembelianPage() {
               {cart.map((item) => {
                 const key = `${item.id}-${item.unit.satuan}`;
                 const isEditing = editQty[key] !== undefined;
+                const available = getAvailableStock(item.id, item.unit.satuan);
                 return (
                   <div
                     key={key}
@@ -331,6 +403,11 @@ export default function PembelianPage() {
                       <p className="text-xs text-blue-700">
                         {formatCurrency(item.unit.price)}/{item.unit.satuan}
                       </p>
+                      {item.quantity >= available && (
+                        <p className="text-[10px] font-medium text-amber-600">
+                          Maks. {available} {item.unit.satuan}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col items-end justify-between">
                       <p className="text-sm font-semibold text-gray-900">
@@ -368,6 +445,7 @@ export default function PembelianPage() {
                                 )
                               }
                               autoFocus
+                              max={available}
                               className="w-12 text-center text-sm border border-blue-500 rounded focus:outline-none"
                             />
                           ) : (
@@ -387,7 +465,9 @@ export default function PembelianPage() {
                             onClick={() =>
                               updateQuantity(item.id, item.unit.satuan, 1)
                             }
-                            className="w-9 h-9 md:w-7 md:h-7 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
+                            disabled={item.quantity >= available}
+                            aria-label={`Tambah jumlah ${item.name}`}
+                            className="w-9 h-9 md:w-7 md:h-7 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-gray-200"
                           >
                             <Plus className="size-4" />
                           </button>
