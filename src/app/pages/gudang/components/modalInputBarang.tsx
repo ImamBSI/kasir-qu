@@ -36,14 +36,15 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 sm:p-4">
+      <div className="bg-white rounded-t-2xl sm:rounded-lg shadow-xl w-full max-w-lg max-h-[92dvh] sm:max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900">Tambah Produk Baru</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900">Tambah Produk Baru</h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
+            aria-label="Tutup"
+            className="p-2 -mr-2 text-gray-400 hover:text-gray-600 rounded transition-colors"
           >
             <X className="size-5" />
           </button>
@@ -173,16 +174,16 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-4 border-t border-gray-200 shrink-0">
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 p-4 border-t border-gray-200 shrink-0">
           <button
             onClick={onClose}
-            className="px-5 py-2 text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors"
+            className="w-full sm:w-auto px-5 py-3 sm:py-2 text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors"
           >
             Batal
           </button>
           <button
             onClick={handleSave}
-            className="px-5 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors"
+            className="w-full sm:w-auto px-5 py-3 sm:py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors"
           >
             Simpan Produk
           </button>

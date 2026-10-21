@@ -26,16 +26,17 @@ export default function DateRange({
   };
 
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
-      <Calendar className="size-4 text-slate-600 hover:text-slate-900 cursor-pointer" />
+    <div className="flex flex-wrap items-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-slate-50 border border-slate-200 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+      <Calendar className="size-4 shrink-0 text-slate-600 hover:text-slate-900 cursor-pointer" />
 
       <input
         ref={startInputRef}
         type="date"
+        aria-label="Tanggal mulai"
         value={startDate}
         onClick={() => openPicker(startInputRef)}
         onChange={(e) => onChange(e.target.value, endDate)}
-        className="bg-transparent text-sm font-medium text-slate-700 focus:outline-none cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden"
+        className="w-[8.5rem] min-w-0 bg-transparent text-xs md:text-sm font-medium text-slate-700 focus:outline-none cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden"
       />
 
       <span className="text-sm font-medium text-slate-500">-</span>
@@ -43,10 +44,11 @@ export default function DateRange({
       <input
         ref={endInputRef}
         type="date"
+        aria-label="Tanggal akhir"
         value={endDate}
         onClick={() => openPicker(endInputRef)}
         onChange={(e) => onChange(startDate, e.target.value)}
-        className="bg-transparent text-sm font-medium text-slate-700 focus:outline-none cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden"
+        className="w-[8.5rem] min-w-0 bg-transparent text-xs md:text-sm font-medium text-slate-700 focus:outline-none cursor-pointer [&::-webkit-calendar-picker-indicator]:hidden"
       />
     </div>
   );

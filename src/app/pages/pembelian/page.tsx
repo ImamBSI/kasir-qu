@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, ShoppingCart, Minus, Plus, Trash } from "lucide-react";
+import { Search, ShoppingCart, Minus, Plus, Trash, X } from "lucide-react";
 import productsData from "@/data/products.json";
 import type { CartItem, Product, ProductUnit } from "@/types";
 
@@ -15,6 +15,7 @@ export default function PembelianPage() {
     {},
   );
   const [editQty, setEditQty] = useState<Record<string, string>>({});
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const removeFromCart = (id: number, satuan: string) => {
     setCart((prev) =>
@@ -141,7 +142,7 @@ export default function PembelianPage() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-full overflow-hidden">
       {/* Main Content */}
       <div className="flex-1 flex flex-col bg-gray-50 min-w-0">
         {/* Search Bar */}
@@ -178,7 +179,7 @@ export default function PembelianPage() {
         </div>
 
         {/* Products Grid - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className="flex-1 overflow-y-auto p-3 pb-24 md:pb-3">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-2">
             {filteredProducts.map((product) => {
               const unitIndex = selectedUnits[product.id] ?? 0;
@@ -236,9 +237,10 @@ export default function PembelianPage() {
                       </div>
                       <button
                         onClick={() => addToCart(product)}
-                        className="w-6 h-6 bg-gray-100 hover:bg-blue-700 hover:text-white rounded-full flex items-center justify-center transition-colors"
+                        aria-label={`Tambah ${product.name}`}
+                        className="w-9 h-9 md:w-7 md:h-7 bg-gray-100 hover:bg-blue-700 hover:text-white rounded-full flex items-center justify-center transition-colors"
                       >
-                        <Plus className="size-3" />
+                        <Plus className="size-4" />
                       </button>
                     </div>
                   </div>
@@ -249,8 +251,41 @@ export default function PembelianPage() {
         </div>
       </div>
 
+      {/* Tombol keranjang - mobile */}
+      <button
+        onClick={() => setIsCartOpen(true)}
+        className="md:hidden fixed right-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 flex items-center gap-2 px-4 py-3 bg-blue-700 text-white rounded-full shadow-lg text-sm font-semibold active:bg-blue-800"
+      >
+        <ShoppingCart className="size-5" />
+        {totalItems > 0 ? `${totalItems} item · ${formatCurrency(total)}` : "Keranjang"}
+      </button>
+
+      {/* Backdrop keranjang - mobile */}
+      {isCartOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-40 bg-black/40"
+          onClick={() => setIsCartOpen(false)}
+        />
+      )}
+
       {/* Cart Panel */}
-      <div className="w-96 bg-white border-l border-gray-200 flex flex-col shrink-0">
+      <div
+        className={`${
+          isCartOpen ? "flex" : "hidden"
+        } md:flex fixed inset-x-0 bottom-0 z-50 h-[85dvh] flex-col bg-white border-t border-gray-200 rounded-t-2xl shadow-xl pb-[env(safe-area-inset-bottom)] md:static md:inset-auto md:z-auto md:h-auto md:w-96 md:shrink-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:pb-0`}
+      >
+        {/* Header keranjang - mobile */}
+        <div className="md:hidden flex items-center justify-between p-3 border-b border-gray-200 shrink-0">
+          <h2 className="text-base font-semibold text-gray-900">Keranjang</h2>
+          <button
+            onClick={() => setIsCartOpen(false)}
+            aria-label="Tutup keranjang"
+            className="p-2 -mr-1 text-gray-500"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+
         {/* Customer Input */}
         <div className="p-3 border-b border-gray-200 shrink-0">
           <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -307,9 +342,9 @@ export default function PembelianPage() {
                             onClick={() =>
                               updateQuantity(item.id, item.unit.satuan, -1)
                             }
-                            className="w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
+                            className="w-9 h-9 md:w-7 md:h-7 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
                           >
-                            <Minus className="size-3" />
+                            <Minus className="size-4" />
                           </button>
                           {isEditing ? (
                             <input
@@ -352,16 +387,16 @@ export default function PembelianPage() {
                             onClick={() =>
                               updateQuantity(item.id, item.unit.satuan, 1)
                             }
-                            className="w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
+                            className="w-9 h-9 md:w-7 md:h-7 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
                           >
-                            <Plus className="size-3" />
+                            <Plus className="size-4" />
                           </button>
                         </div>
                         <button
                           onClick={() =>
                             removeFromCart(item.id, item.unit.satuan)
                           }
-                          className="w-7 h-7 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded flex items-center justify-center transition-colors"
+                          className="w-9 h-9 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded flex items-center justify-center transition-colors"
                         >
                           <Trash className="size-4" />
                         </button>
@@ -390,7 +425,7 @@ export default function PembelianPage() {
               {formatCurrency(total)}
             </span>
           </div>
-          <button className="w-full py-2.5 bg-blue-700 text-white rounded-lg text-sm font-semibold hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 mt-3">
+          <button className="w-full py-3 bg-blue-700 text-white rounded-lg text-sm font-semibold hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 mt-3">
             <ShoppingCart className="size-4" />
             Selesaikan Transaksi
           </button>

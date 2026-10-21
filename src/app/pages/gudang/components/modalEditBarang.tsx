@@ -55,23 +55,24 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50">
+      <div className="bg-white rounded-t-2xl sm:rounded-lg shadow-xl w-full max-w-2xl max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-200">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900">
             Update Stok & Harga Produk
           </h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
+            aria-label="Tutup"
+            className="p-2 -mr-2 text-gray-400 hover:text-gray-600 rounded transition-colors"
           >
             <X className="size-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-5 space-y-5">
+        <div className="p-4 sm:p-5 space-y-5">
           {/* Product Info */}
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
@@ -93,7 +94,7 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
                 Update Stok Baru
               </h3>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {product.units.map((unit) => (
                 <div key={unit.satuan}>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -124,7 +125,7 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
                 Penyesuaian Harga (Rp)
               </h3>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {product.units.map((unit) => (
                 <div key={unit.satuan}>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -148,16 +149,16 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 p-5 border-t border-gray-200">
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 p-4 sm:p-5 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="px-5 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+            className="w-full sm:w-auto px-5 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
           >
             Batal
           </button>
           <button
             onClick={handleSave}
-            className="px-5 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors"
+            className="w-full sm:w-auto px-5 py-3 sm:py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors"
           >
             Simpan Perubahan
           </button>

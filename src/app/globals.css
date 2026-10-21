@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Cegah iOS auto-zoom saat input difokuskan */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }

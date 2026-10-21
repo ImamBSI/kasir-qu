@@ -88,16 +88,16 @@ export default function GudangPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Inventory</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Inventory</h1>
           <p className="text-sm text-gray-500 mt-1">
             Manage stock levels and pricing
           </p>
         </div>
         <button
           onClick={() => setShowInputModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800 w-full sm:w-auto"
         >
           <Plus className="size-4" />
           Tambah Produk
@@ -105,8 +105,8 @@ export default function GudangPage() {
       </div>
 
       {/* Search & Filter */}
-      <div className="flex items-center gap-3 mb-4 p-4 bg-white border border-gray-200 rounded-lg">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center mb-4 p-3 md:p-4 bg-white border border-gray-200 rounded-lg">
+        <div className="relative w-full md:flex-1 md:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
           <input
             type="text"
@@ -119,7 +119,7 @@ export default function GudangPage() {
             className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto pb-0.5">
           {categories.map((category) => (
             <button
               key={category}
@@ -141,7 +141,76 @@ export default function GudangPage() {
 
       {/* Table */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile card list */}
+        <div className="md:hidden divide-y divide-gray-200">
+          {paginatedProducts.map((product) => {
+            const selectedUnitIndex = selectedUnits[product.id] ?? 0;
+            const currentUnit = product.units[selectedUnitIndex] ?? product.units[0];
+            const displayStock = Math.floor(
+              product.stock_pcs / currentUnit.isi_dalam_satuan_dasar,
+            );
+            const isLowStock = displayStock < 20;
+            return (
+              <div key={product.id} className="flex gap-3 p-3">
+                <div className="w-14 h-14 shrink-0 bg-gray-100 rounded overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {product.name}
+                  </p>
+                  <p className="text-xs text-gray-500">SKU: {product.sku}</p>
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
+                    <select
+                      value={selectedUnitIndex}
+                      onChange={(e) =>
+                        setSelectedUnits((prev) => ({
+                          ...prev,
+                          [product.id]: Number(e.target.value),
+                        }))
+                      }
+                      aria-label={`Satuan ${product.name}`}
+                      className="bg-gray-50 border border-gray-200 rounded px-2 py-1.5 text-xs"
+                    >
+                      {product.units.map((unit, index) => (
+                        <option key={unit.satuan} value={index}>
+                          {unit.satuan}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-sm font-mono text-gray-900">
+                      {formatCurrency(currentUnit.price)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end justify-between shrink-0">
+                  <div className="text-right">
+                    <p
+                      className={`text-sm font-semibold ${isLowStock ? "text-red-600" : "text-gray-900"}`}
+                    >
+                      {displayStock}
+                    </p>
+                    {isLowStock && (
+                      <p className="text-[10px] text-red-500">Low Stock</p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setEditingProduct(product)}
+                    className="px-3 py-2 bg-blue-700 text-white rounded-md text-xs font-medium active:bg-blue-800"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
@@ -284,40 +353,47 @@ export default function GudangPage() {
 
         {/* Pagination */}
         {filteredProducts.length > 0 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-            <p className="text-sm text-gray-600">
-              Showing {startEntry} to {endEntry} of {filteredProducts.length}{" "}
-              entries
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-3 py-3 md:px-4 border-t border-gray-200">
+            <p className="text-xs sm:text-sm text-gray-600">
+              Menampilkan {startEntry}-{endEntry} dari {filteredProducts.length}{" "}
+              produk
             </p>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-between sm:justify-end gap-1">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-1.5 border border-gray-300 rounded text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Halaman sebelumnya"
+                className="p-2.5 md:p-1.5 border border-gray-300 rounded text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="size-4" />
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 text-sm rounded ${
-                      currentPage === page
-                        ? "bg-blue-700 text-white"
-                        : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ),
-              )}
+              <div className="hidden sm:flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 text-sm rounded ${
+                        currentPage === page
+                          ? "bg-blue-700 text-white"
+                          : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ),
+                )}
+              </div>
+              <span className="sm:hidden px-3 text-sm text-gray-600">
+                {currentPage} / {totalPages}
+              </span>
               <button
                 onClick={() =>
                   setCurrentPage((p) => Math.min(totalPages, p + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="p-1.5 border border-gray-300 rounded text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Halaman berikutnya"
+                className="p-2.5 md:p-1.5 border border-gray-300 rounded text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="size-4" />
               </button>

@@ -1,12 +1,10 @@
 "use client";
 
 import {
-  Home,
   ShoppingBasketIcon,
   WarehouseIcon,
   LogOut,
   HelpCircle,
-  TrendingUp,
   ChartColumnIcon,
   LayoutDashboardIcon,
   Search,
@@ -51,9 +49,9 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col">
+    <div className="flex h-dvh overflow-hidden bg-white">
+      {/* Sidebar - desktop only */}
+      <aside className="hidden md:flex w-64 shrink-0 bg-gray-50 border-r border-gray-200 flex-col">
         {/* Logo */}
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
@@ -110,11 +108,22 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-white">
+      {/* Main */}
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Top Bar */}
-        <header className="h-16 border-b border-gray-200 flex items-center justify-between px-6">
-          <div className="relative w-96" ref={searchRef}>
+        <header className="h-14 md:h-16 shrink-0 border-b border-gray-200 flex items-center justify-between gap-3 px-3 md:px-6">
+          {/* Logo - mobile only */}
+          <Link href="/" className="flex items-center gap-2.5 md:hidden">
+            <div className="w-8 h-8 bg-blue-700 rounded-md flex items-center justify-center">
+              <Store className="size-4 text-white" />
+            </div>
+            <div className="leading-tight">
+              <p className="font-bold text-sm text-gray-900">KasirQu</p>
+              <p className="text-[11px] text-gray-500">Admin Console</p>
+            </div>
+          </Link>
+
+          <div className="relative hidden md:block w-full max-w-sm" ref={searchRef}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400" />
             <input
               type="text"
@@ -147,14 +156,45 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               </div>
             )}
           </div>
-          <div className="flex items-center gap-4">
+
+          <div className="flex items-center gap-4 ml-auto">
             <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-2 overflow-auto">{children}</main>
+        <main className="flex-1 min-h-0 overflow-y-auto p-2 pb-24 md:p-3 md:pb-3">
+          {children}
+        </main>
       </div>
+
+      {/* Bottom navigation - mobile only */}
+      <nav
+        aria-label="Navigasi utama"
+        className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]"
+      >
+        <ul className="flex">
+          {menuItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.href} className="flex-1">
+                <Link
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex flex-col items-center justify-center gap-1 min-h-14 py-1.5 text-[11px] font-medium transition-colors ${
+                    isActive
+                      ? "text-blue-700 bg-blue-50"
+                      : "text-gray-500 active:bg-gray-100"
+                  }`}
+                >
+                  <item.icon className="size-5" />
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </div>
   );
 }

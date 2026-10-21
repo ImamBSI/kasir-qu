@@ -95,20 +95,20 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <div className="flex items-start justify-between mb-6 shrink-0">
+    <div className="flex flex-col">
+      <div className="flex items-start justify-between mb-4 md:mb-6 shrink-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Overview</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Overview</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Monitor your store's performance and top customers.
+            Monitor your store&rsquo;s performance and top customers.
           </p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
           {/* Top Customers Card */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
               <Trophy className="size-5 text-blue-600" />
               Top 3 Customers
@@ -143,7 +143,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Sales Distribution Chart - Sekarang Jauh Lebih Bersih! */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
               <PieChart className="size-5 text-blue-600" />
               Sales Distribution
@@ -161,7 +161,7 @@ export default function DashboardPage() {
         {/* Bottom Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div className="lg:col-span-2 bg-white border border-gray-200 rounded-lg">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 md:p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <TableIcon className="size-5 text-blue-600" />
                 Recent Order
@@ -173,7 +173,7 @@ export default function DashboardPage() {
               />
             </div>
             <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[640px]">
                 <thead className="sticky top-0 bg-gray-50 z-10">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -230,7 +230,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-linear-to-br from-blue-700 to-blue-900 rounded-lg p-6 max-h-2/3 text-white">
+          <div className="bg-linear-to-br from-blue-700 to-blue-900 rounded-lg p-4 md:p-6 max-h-2/3 text-white">
             <h2 className="text-lg font-semibold flex items-center gap-2 mb-1">
               <ChartNoAxesCombinedIcon className="size-5" />
               Sales Summary
