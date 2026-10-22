@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import ImageUpload from "./imageUpload";
 
 interface ModalInputBarangProps {
   categories: string[];
@@ -10,30 +11,61 @@ interface ModalInputBarangProps {
     name: string;
     category: string;
     cost_price: number;
+    image: string;
     units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
   }) => void;
 }
 
-export default function ModalInputBarang({ categories, onClose, onSave }: ModalInputBarangProps) {
+const inputClass =
+  "w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+const priceClass =
+  "w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+export default function ModalInputBarang({
+  categories,
+  onClose,
+  onSave,
+}: ModalInputBarangProps) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
-  const [costPrice, setCostPrice] = useState(0);
+  const [image, setImage] = useState("");
   const [pcsPrice, setPcsPrice] = useState(0);
   const [rcgPrice, setRcgPrice] = useState(0);
   const [rcgIsi, setRcgIsi] = useState(0);
   const [dusPrice, setDusPrice] = useState(0);
   const [dusIsi, setDusIsi] = useState(0);
+  const [costInput, setCostInput] = useState(0);
+
+  const hasDus = dusIsi > 0;
+  const costPerPcs = hasDus ? Math.round(costInput / dusIsi) : costInput;
+  const canSave = name.trim().length > 0 && category.trim().length > 0 && pcsPrice > 0;
 
   const handleSave = () => {
+    if (!canSave) return;
+
     const units = [{ satuan: "Pcs", price: pcsPrice, isi_dalam_satuan_dasar: 1 }];
     if (rcgPrice > 0 && rcgIsi > 0) {
-      units.push({ satuan: "Rcg", price: rcgPrice, isi_dalam_satuan_dasar: rcgIsi });
+      units.push({
+        satuan: "Rcg",
+        price: rcgPrice,
+        isi_dalam_satuan_dasar: rcgIsi,
+      });
     }
     if (dusPrice > 0 && dusIsi > 0) {
-      units.push({ satuan: "Dus", price: dusPrice, isi_dalam_satuan_dasar: dusIsi });
+      units.push({
+        satuan: "Dus",
+        price: dusPrice,
+        isi_dalam_satuan_dasar: dusIsi,
+      });
     }
 
-    onSave({ name, category, cost_price: costPrice, units });
+    onSave({
+      name: name.trim(),
+      category: category.trim(),
+      cost_price: costPerPcs,
+      image,
+      units,
+    });
     onClose();
   };
 
@@ -42,7 +74,9 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
       <div className="bg-white rounded-t-2xl sm:rounded-lg shadow-xl w-full max-w-lg max-h-[92dvh] sm:max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900">Tambah Produk Baru</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+            Tambah Produk Baru
+          </h2>
           <button
             onClick={onClose}
             aria-label="Tutup"
@@ -64,7 +98,7 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Contoh: Minyak Goreng Bimoli 2L"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={inputClass}
             />
           </div>
 
@@ -73,19 +107,28 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Kategori
             </label>
-            <select
+            <input
+              type="text"
+              list="product-category-options"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Pilih Kategori</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
+              placeholder="Ketik atau pilih kategori"
+              className={inputClass}
+            />
+            <datalist id="product-category-options">
+              {categories
+                .filter((cat) => cat !== "Semua")
+                .map((cat) => (
+                  <option key={cat} value={cat} />
+                ))}
+            </datalist>
+            <p className="mt-1 text-xs text-gray-500">
+              Kategori baru otomatis masuk daftar filter setelah produk disimpan.
+            </p>
           </div>
+
+          {/* Foto */}
+          <ImageUpload value={image} onChange={setImage} />
 
           {/* Harga & Konversi Satuan */}
           <div>
@@ -93,29 +136,6 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
               Harga & Konversi Satuan
             </label>
             <div className="space-y-3">
-              {/* HARGA BELI */}
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  HARGA BELI PER PCS (MODAL)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                    Rp
-                  </span>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    value={costPrice || ""}
-                    onChange={(e) => setCostPrice(parseInt(e.target.value, 10) || 0)}
-                    placeholder="0"
-                    className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <p className="mt-1 text-xs text-gray-500">
-                  Dipakai untuk menghitung laba kotor di halaman laporan.
-                </p>
-              </div>
-
               {/* PCS */}
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -127,10 +147,13 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
                   </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={pcsPrice || ""}
-                    onChange={(e) => setPcsPrice(parseInt(e.target.value, 10) || 0)}
+                    onChange={(e) =>
+                      setPcsPrice(parseInt(e.target.value, 10) || 0)
+                    }
                     placeholder="0"
-                    className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={priceClass}
                   />
                 </div>
               </div>
@@ -146,20 +169,28 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
                   </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={rcgPrice || ""}
-                    onChange={(e) => setRcgPrice(parseInt(e.target.value, 10) || 0)}
+                    onChange={(e) =>
+                      setRcgPrice(parseInt(e.target.value, 10) || 0)
+                    }
                     placeholder="Harga per Renceng"
-                    className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={priceClass}
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 whitespace-nowrap">ISI PER RENCENG</span>
+                  <span className="text-xs text-gray-500 whitespace-nowrap">
+                    ISI PER RENCENG
+                  </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={rcgIsi || ""}
-                    onChange={(e) => setRcgIsi(parseInt(e.target.value, 10) || 0)}
+                    onChange={(e) =>
+                      setRcgIsi(parseInt(e.target.value, 10) || 0)
+                    }
                     placeholder="0"
-                    className="flex-1 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={inputClass.replace("w-full", "flex-1")}
                   />
                   <span className="text-xs text-gray-500">pcs</span>
                 </div>
@@ -176,25 +207,60 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
                   </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={dusPrice || ""}
-                    onChange={(e) => setDusPrice(parseInt(e.target.value, 10) || 0)}
+                    onChange={(e) =>
+                      setDusPrice(parseInt(e.target.value, 10) || 0)
+                    }
                     placeholder="Harga per Dus"
-                    className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={priceClass}
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 whitespace-nowrap">ISI PER DUS</span>
+                  <span className="text-xs text-gray-500 whitespace-nowrap">
+                    ISI PER DUS
+                  </span>
                   <input
                     type="number"
+                    inputMode="numeric"
                     value={dusIsi || ""}
-                    onChange={(e) => setDusIsi(parseInt(e.target.value, 10) || 0)}
+                    onChange={(e) =>
+                      setDusIsi(parseInt(e.target.value, 10) || 0)
+                    }
                     placeholder="0"
-                    className="flex-1 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={inputClass.replace("w-full", "flex-1")}
                   />
                   <span className="text-xs text-gray-500">pcs</span>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Harga Beli */}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              {hasDus ? "HARGA BELI PER DUS (MODAL)" : "HARGA BELI PER PCS (MODAL)"}
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                Rp
+              </span>
+              <input
+                type="number"
+                inputMode="numeric"
+                value={costInput || ""}
+                onChange={(e) =>
+                  setCostInput(parseInt(e.target.value, 10) || 0)
+                }
+                placeholder="0"
+                className={priceClass}
+              />
+            </div>
+            <p className="mt-1 text-xs text-gray-500">
+              {hasDus
+                ? `Modal per pcs: ${costInput > 0 ? `Rp ${Math.round(costInput / dusIsi).toLocaleString("id-ID")}` : "—"} (isi ${dusIsi} pcs/dus)`
+                : "Isi per dus belum diisi, jadi modal dihitung per pcs."}
+            </p>
           </div>
         </div>
 
@@ -208,7 +274,8 @@ export default function ModalInputBarang({ categories, onClose, onSave }: ModalI
           </button>
           <button
             onClick={handleSave}
-            className="w-full sm:w-auto px-5 py-3 sm:py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors"
+            disabled={!canSave}
+            className="w-full sm:w-auto px-5 py-3 sm:py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400"
           >
             Simpan Produk
           </button>

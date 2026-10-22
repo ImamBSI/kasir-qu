@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Search, ShoppingCart, Minus, Plus, Trash, X } from "lucide-react";
 import productsData from "@/data/products.json";
 import type { CartItem, Product, ProductUnit } from "@/types";
@@ -17,6 +17,23 @@ export default function PembelianPage() {
   );
   const [editQty, setEditQty] = useState<Record<string, string>>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [stockNotice, setStockNotice] = useState<{
+    key: string;
+    message: string;
+  } | null>(null);
+  const noticeTimer = useRef<number | null>(null);
+
+  const showStockNotice = (key: string, message: string) => {
+    setStockNotice({ key, message });
+    if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+    noticeTimer.current = window.setTimeout(() => setStockNotice(null), 3000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+    };
+  }, []);
 
   const removeFromCart = (id: number, satuan: string) => {
     setCart((prev) =>
@@ -68,15 +85,27 @@ export default function PembelianPage() {
     const unit = getSelectedUnit(product.id);
     if (!unit) return;
 
+    const key = `${product.id}-${unit.satuan}`;
     const available = getUnitStock(product, unit);
-    if (available <= 0) return;
+
+    if (available <= 0) {
+      showStockNotice(key, `Stok ${unit.satuan} habis`);
+      return;
+    }
+
+    const existing = cart.find(
+      (item) => item.id === product.id && item.unit.satuan === unit.satuan,
+    );
+    if (existing && existing.quantity + 1 > available) {
+      showStockNotice(key, `Stok hanya ${available} ${unit.satuan}`);
+      return;
+    }
 
     setCart((prev) => {
-      const existing = prev.find(
+      const current = prev.find(
         (item) => item.id === product.id && item.unit.satuan === unit.satuan,
       );
-      if (existing) {
-        if (existing.quantity >= available) return prev;
+      if (current) {
         return prev.map((item) =>
           item.id === product.id && item.unit.satuan === unit.satuan
             ? { ...item, quantity: item.quantity + 1 }
@@ -97,21 +126,28 @@ export default function PembelianPage() {
   };
 
   const updateQuantity = (id: number, satuan: string, delta: number) => {
+    const key = `${id}-${satuan}`;
+    const item = cart.find(
+      (entry) => entry.id === id && entry.unit.satuan === satuan,
+    );
+    if (!item) return;
+
     const available = getAvailableStock(id, satuan);
+    const nextQuantity = item.quantity + delta;
+
+    if (nextQuantity > available) {
+      showStockNotice(key, `Stok hanya ${available} ${satuan}`);
+      return;
+    }
+
     setCart((prev) =>
       prev
-        .map((item) =>
-          item.id === id && item.unit.satuan === satuan
-            ? {
-                ...item,
-                quantity: Math.min(
-                  available,
-                  Math.max(0, item.quantity + delta),
-                ),
-              }
-            : item,
+        .map((entry) =>
+          entry.id === id && entry.unit.satuan === satuan
+            ? { ...entry, quantity: Math.max(0, nextQuantity) }
+            : entry,
         )
-        .filter((item) => item.quantity > 0),
+        .filter((entry) => entry.quantity > 0),
     );
   };
 
@@ -123,18 +159,23 @@ export default function PembelianPage() {
     const key = `${id}-${satuan}`;
     const qty = parseInt(editQty[key], 10);
     const available = getAvailableStock(id, satuan);
+
     if (!isNaN(qty)) {
-      const clamped = Math.min(Math.max(0, qty), available);
+      if (qty > available) {
+        showStockNotice(key, `Stok hanya ${available} ${satuan}`);
+      }
+      const nextQuantity = Math.min(Math.max(0, qty), available);
       setCart((prev) =>
         prev
           .map((item) =>
             item.id === id && item.unit.satuan === satuan
-              ? { ...item, quantity: clamped }
+              ? { ...item, quantity: nextQuantity }
               : item,
           )
           .filter((item) => item.quantity > 0),
       );
     }
+
     setEditQty((prev) => {
       const next = { ...prev };
       delete next[key];
@@ -183,7 +224,7 @@ export default function PembelianPage() {
 
         {/* Categories */}
         <div className="px-3 py-2 bg-white border-b border-gray-200 shrink-0">
-          <div className="flex gap-1.5 overflow-x-auto">
+          <div className="flex flex-wrap gap-1.5">
             {categories.map((category) => (
               <button
                 key={category}
@@ -201,29 +242,22 @@ export default function PembelianPage() {
         </div>
 
         {/* Products Grid - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-3 pb-24 md:pb-3">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-2">
+        <div className="flex-1 overflow-y-auto p-3 pb-24 xl:pb-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {filteredProducts.map((product) => {
               const unitIndex = selectedUnits[product.id] ?? 0;
               const currentUnit = product.units[unitIndex] ?? product.units[0];
               const available = getUnitStock(product, currentUnit);
               const empty = isOutOfStock(product);
-              const inCart =
-                cart.find(
-                  (item) =>
-                    item.id === product.id &&
-                    item.unit.satuan === currentUnit.satuan,
-                )?.quantity ?? 0;
-              const reachedLimit = available > 0 && inCart >= available;
 
               return (
                 <div
                   key={product.id}
-                  className={`relative bg-white border border-gray-200 rounded-lg overflow-hidden transition-shadow ${
+                  className={`relative flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden transition-shadow ${
                     empty ? "opacity-70" : "hover:shadow-md"
                   }`}
                 >
-                  <div className="relative aspect-square bg-gray-100">
+                  <div className="relative aspect-[4/3] bg-gray-100">
                     <img
                       src={product.image}
                       alt={product.name}
@@ -235,26 +269,15 @@ export default function PembelianPage() {
                       </span>
                     )}
                   </div>
-                  <div className="p-2.5">
-                    <h3 className="font-semibold text-gray-900 text-sm mb-0.5 truncate">
+                  <div className="flex flex-1 flex-col p-2.5">
+                    <h3 className="font-semibold text-gray-900 text-sm leading-5 mb-1 line-clamp-2">
                       {product.name}
                     </h3>
-                    <p className="text-[11px] text-gray-500">
-                      SKU: {product.sku}
-                    </p>
-                    <p
-                      className={`text-[11px] mb-1.5 ${
-                        empty || available === 0
-                          ? "text-red-600 font-medium"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      {empty
-                        ? "Stok habis"
-                        : available === 0
-                          ? `Stok ${currentUnit.satuan} habis`
-                          : `Sisa ${available} ${currentUnit.satuan}`}
-                    </p>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] mb-2">
+                      <span className="text-gray-500">
+                        SKU: {product.sku}
+                      </span>
+                    </div>
 
                     {/* Unit Selector */}
                     <div className="flex gap-0.5 mb-2">
@@ -275,7 +298,7 @@ export default function PembelianPage() {
                                 ? `Stok ${unit.satuan} habis`
                                 : undefined
                             }
-                            className={`flex-1 py-1.5 px-1 text-[11px] rounded border transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                            className={`flex-1 py-2 px-1 text-xs rounded border transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                               unitIndex === idx
                                 ? "bg-blue-700 text-white border-blue-700"
                                 : "bg-white text-gray-600 border-gray-300 hover:bg-gray-50"
@@ -287,33 +310,31 @@ export default function PembelianPage() {
                       })}
                     </div>
 
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="min-w-0">
-                        <span className="text-blue-700 font-bold text-sm">
-                          {formatCurrency(currentUnit.price)}
-                        </span>
-                        <span className="text-[10px] text-gray-500">
+                    <div className="flex-1" aria-hidden="true" />
+
+                    <div>
+                      <p className="text-base font-bold text-blue-700 leading-tight">
+                        {formatCurrency(currentUnit.price)}
+                        <span className="ml-0.5 text-[11px] font-normal text-gray-500">
                           /{currentUnit.satuan}
                         </span>
-                      </div>
+                      </p>
                       <button
                         onClick={() => addToCart(product)}
-                        disabled={empty || available === 0 || reachedLimit}
-                        aria-label={
-                          reachedLimit
-                            ? `Stok ${product.name} sudah maksimal di keranjang`
-                            : `Tambah ${product.name}`
-                        }
-                        className="w-9 h-9 md:w-8 md:h-8 shrink-0 bg-gray-100 hover:bg-blue-700 hover:text-white rounded-full flex items-center justify-center transition-colors disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-gray-100"
+                        disabled={empty || available === 0}
+                        aria-label={`Tambah ${product.name}`}
+                        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-700 px-2 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
                       >
                         <Plus className="size-4" />
+                        {empty || available === 0 ? "Stok habis" : "Tambah"}
                       </button>
+                      {stockNotice?.key ===
+                        `${product.id}-${currentUnit.satuan}` && (
+                        <p className="mt-1.5 text-[11px] font-medium text-red-600">
+                          {stockNotice.message}
+                        </p>
+                      )}
                     </div>
-                    {reachedLimit && (
-                      <p className="mt-1 text-[10px] text-amber-600">
-                        Maksimal di keranjang
-                      </p>
-                    )}
                   </div>
                 </div>
               );
@@ -325,7 +346,7 @@ export default function PembelianPage() {
       {/* Tombol keranjang - mobile */}
       <button
         onClick={() => setIsCartOpen(true)}
-        className="md:hidden fixed right-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 flex items-center gap-2 px-4 py-3 bg-blue-700 text-white rounded-full shadow-lg text-sm font-semibold active:bg-blue-800"
+        className="xl:hidden fixed right-4 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] md:bottom-4 z-30 flex items-center gap-2 px-4 py-3 bg-blue-700 text-white rounded-full shadow-lg text-sm font-semibold active:bg-blue-800"
       >
         <ShoppingCart className="size-5" />
         {totalItems > 0 ? `${totalItems} item · ${formatCurrency(total)}` : "Keranjang"}
@@ -334,7 +355,7 @@ export default function PembelianPage() {
       {/* Backdrop keranjang - mobile */}
       {isCartOpen && (
         <div
-          className="md:hidden fixed inset-0 z-40 bg-black/40"
+          className="xl:hidden fixed inset-0 z-40 bg-black/40"
           onClick={() => setIsCartOpen(false)}
         />
       )}
@@ -343,10 +364,10 @@ export default function PembelianPage() {
       <div
         className={`${
           isCartOpen ? "flex" : "hidden"
-        } md:flex fixed inset-x-0 bottom-0 z-50 h-[85dvh] flex-col bg-white border-t border-gray-200 rounded-t-2xl shadow-xl pb-[env(safe-area-inset-bottom)] md:static md:inset-auto md:z-auto md:h-auto md:w-96 md:shrink-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:pb-0`}
+        } xl:flex fixed inset-x-0 bottom-0 z-50 h-[85dvh] flex-col bg-white border-t border-gray-200 rounded-t-2xl shadow-xl pb-[env(safe-area-inset-bottom)] xl:static xl:inset-auto xl:z-auto xl:h-auto xl:w-96 xl:shrink-0 xl:rounded-none xl:border-t-0 xl:border-l xl:shadow-none xl:pb-0`}
       >
         {/* Header keranjang - mobile */}
-        <div className="md:hidden flex items-center justify-between p-3 border-b border-gray-200 shrink-0">
+        <div className="xl:hidden flex items-center justify-between p-3 border-b border-gray-200 shrink-0">
           <h2 className="text-base font-semibold text-gray-900">Keranjang</h2>
           <button
             onClick={() => setIsCartOpen(false)}
@@ -383,7 +404,6 @@ export default function PembelianPage() {
               {cart.map((item) => {
                 const key = `${item.id}-${item.unit.satuan}`;
                 const isEditing = editQty[key] !== undefined;
-                const available = getAvailableStock(item.id, item.unit.satuan);
                 return (
                   <div
                     key={key}
@@ -403,9 +423,9 @@ export default function PembelianPage() {
                       <p className="text-xs text-blue-700">
                         {formatCurrency(item.unit.price)}/{item.unit.satuan}
                       </p>
-                      {item.quantity >= available && (
-                        <p className="text-[10px] font-medium text-amber-600">
-                          Maks. {available} {item.unit.satuan}
+                      {stockNotice?.key === key && (
+                        <p className="text-[11px] font-medium text-red-600">
+                          {stockNotice.message}
                         </p>
                       )}
                     </div>
@@ -445,7 +465,6 @@ export default function PembelianPage() {
                                 )
                               }
                               autoFocus
-                              max={available}
                               className="w-12 text-center text-sm border border-blue-500 rounded focus:outline-none"
                             />
                           ) : (
@@ -465,9 +484,8 @@ export default function PembelianPage() {
                             onClick={() =>
                               updateQuantity(item.id, item.unit.satuan, 1)
                             }
-                            disabled={item.quantity >= available}
                             aria-label={`Tambah jumlah ${item.name}`}
-                            className="w-9 h-9 md:w-7 md:h-7 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-gray-200"
+                            className="w-9 h-9 md:w-7 md:h-7 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
                           >
                             <Plus className="size-4" />
                           </button>

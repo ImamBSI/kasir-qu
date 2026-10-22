@@ -62,12 +62,18 @@ export default function GudangPage() {
   const handleSaveUpdate = (
     productId: number,
     updatedUnits: ProductUnit[],
-    updatedStock: number
+    updatedStock: number,
+    image: string,
   ) => {
     setProducts((prev) =>
       prev.map((p) =>
         p.id === productId
-          ? { ...p, units: updatedUnits, stock_pcs: updatedStock }
+          ? {
+              ...p,
+              units: updatedUnits,
+              stock_pcs: updatedStock,
+              image: image || "/images/placeholder.svg",
+            }
           : p
       )
     );
@@ -78,6 +84,7 @@ export default function GudangPage() {
     name: string;
     category: string;
     cost_price: number;
+    image: string;
     units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
   }) => {
     const maxId = products.reduce((max, p) => Math.max(max, p.id), 0);
@@ -86,7 +93,7 @@ export default function GudangPage() {
       name: newProduct.name,
       sku: `SKU-${maxId + 1}`,
       category: newProduct.category,
-      image: "/images/placeholder.svg",
+      image: newProduct.image || "/images/placeholder.svg",
       stock_pcs: 0,
       cost_price: newProduct.cost_price,
       min_stock: 10,
@@ -128,7 +135,7 @@ export default function GudangPage() {
             className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-0.5">
+        <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <button
               key={category}

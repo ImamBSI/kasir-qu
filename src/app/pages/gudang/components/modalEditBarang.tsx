@@ -4,14 +4,21 @@ import { useState } from "react";
 import { X, Package } from "lucide-react";
 import type { Product, ProductUnit } from "@/types";
 import { formatCurrency } from "@/utils/format";
+import ImageUpload from "./imageUpload";
 
 interface ModalEditBarangProps {
   product: Product;
   onClose: () => void;
-  onSave: (productId: number, updatedUnits: ProductUnit[], updatedStock: number) => void;
+  onSave: (
+    productId: number,
+    updatedUnits: ProductUnit[],
+    updatedStock: number,
+    image: string,
+  ) => void;
 }
 
 export default function ModalEditBarang({ product, onClose, onSave }: ModalEditBarangProps) {
+  const [image, setImage] = useState(product.image);
   const [stockAdditions, setStockAdditions] = useState<Record<string, number>>(
     product.units.reduce((acc, unit) => ({ ...acc, [unit.satuan]: 0 }), {})
   );
@@ -50,7 +57,7 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
 
     const updatedStock = product.stock_pcs + totalAddedPcs;
 
-    onSave(product.id, updatedUnits, updatedStock);
+    onSave(product.id, updatedUnits, updatedStock, image);
     onClose();
   };
 
@@ -75,14 +82,20 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
         <div className="p-4 sm:p-5 space-y-5">
           {/* Product Info */}
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-            <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
-              <Package className="size-5 text-gray-500" />
+            <div className="size-10 shrink-0 overflow-hidden rounded bg-gray-200">
+              <img
+                src={image || "/images/placeholder.svg"}
+                alt={product.name}
+                className="size-full object-cover"
+              />
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">{product.name}</p>
               <p className="text-xs text-gray-500">SKU: {product.sku}</p>
             </div>
           </div>
+
+          <ImageUpload value={image} onChange={setImage} />
 
           {/* UPDATE STOK BARU */}
           <div>
