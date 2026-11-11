@@ -22,6 +22,7 @@ export interface Product {
   image: string;
   stock_pcs: number;
   cost_price?: number;
+  cost_unit?: string;
   min_stock?: number;
   units: ProductUnit[];
 }

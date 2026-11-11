@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import ImageUpload from "./imageUpload";
+import { formatCurrency } from "@/utils/format";
 
 interface ModalInputBarangProps {
   categories: string[];
@@ -11,6 +12,7 @@ interface ModalInputBarangProps {
     name: string;
     category: string;
     cost_price: number;
+    cost_unit: string;
     image: string;
     units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
   }) => void;
@@ -36,8 +38,12 @@ export default function ModalInputBarang({
   const [dusIsi, setDusIsi] = useState(0);
   const [costInput, setCostInput] = useState(0);
 
-  const hasDus = dusIsi > 0;
-  const costPerPcs = hasDus ? Math.round(costInput / dusIsi) : costInput;
+  const hasRcg = rcgPrice > 0 && rcgIsi > 0;
+  const hasDus = dusPrice > 0 && dusIsi > 0;
+  const costUnit = hasDus ? "Dus" : hasRcg ? "Rcg" : "Pcs";
+  const costUnitIsi = hasDus ? dusIsi : hasRcg ? rcgIsi : 1;
+  const costUnitSellPrice = hasDus ? dusPrice : hasRcg ? rcgPrice : pcsPrice;
+  const estimatedProfit = costUnitSellPrice - costInput;
   const canSave = name.trim().length > 0 && category.trim().length > 0 && pcsPrice > 0;
 
   const handleSave = () => {
@@ -62,7 +68,8 @@ export default function ModalInputBarang({
     onSave({
       name: name.trim(),
       category: category.trim(),
-      cost_price: costPerPcs,
+      cost_price: costInput,
+      cost_unit: costUnit,
       image,
       units,
     });
@@ -130,16 +137,16 @@ export default function ModalInputBarang({
           {/* Foto */}
           <ImageUpload value={image} onChange={setImage} />
 
-          {/* Harga & Konversi Satuan */}
+          {/* Harga Jual & Konversi Satuan */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Harga & Konversi Satuan
+              Harga Jual & Konversi Satuan
             </label>
             <div className="space-y-3">
               {/* PCS */}
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  PCS (DASAR)
+                  HARGA JUAL PCS (DASAR)
                 </label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
@@ -161,7 +168,7 @@ export default function ModalInputBarang({
               {/* RCG */}
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  RCG
+                  HARGA JUAL RCG
                 </label>
                 <div className="relative mb-1.5">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
@@ -174,7 +181,7 @@ export default function ModalInputBarang({
                     onChange={(e) =>
                       setRcgPrice(parseInt(e.target.value, 10) || 0)
                     }
-                    placeholder="Harga per Renceng"
+                    placeholder="Harga jual per Renceng"
                     className={priceClass}
                   />
                 </div>
@@ -199,7 +206,7 @@ export default function ModalInputBarang({
               {/* DUS */}
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
-                  DUS
+                  HARGA JUAL DUS
                 </label>
                 <div className="relative mb-1.5">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
@@ -212,7 +219,7 @@ export default function ModalInputBarang({
                     onChange={(e) =>
                       setDusPrice(parseInt(e.target.value, 10) || 0)
                     }
-                    placeholder="Harga per Dus"
+                    placeholder="Harga jual per Dus"
                     className={priceClass}
                   />
                 </div>
@@ -236,10 +243,10 @@ export default function ModalInputBarang({
             </div>
           </div>
 
-          {/* Harga Beli */}
+          {/* Harga Modal */}
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">
-              {hasDus ? "HARGA BELI PER DUS (MODAL)" : "HARGA BELI PER PCS (MODAL)"}
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Harga Modal per {costUnit}
             </label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
@@ -252,15 +259,29 @@ export default function ModalInputBarang({
                 onChange={(e) =>
                   setCostInput(parseInt(e.target.value, 10) || 0)
                 }
-                placeholder="0"
+                placeholder={`Harga beli per ${costUnit}`}
                 className={priceClass}
               />
             </div>
             <p className="mt-1 text-xs text-gray-500">
-              {hasDus
-                ? `Modal per pcs: ${costInput > 0 ? `Rp ${Math.round(costInput / dusIsi).toLocaleString("id-ID")}` : "—"} (isi ${dusIsi} pcs/dus)`
-                : "Isi per dus belum diisi, jadi modal dihitung per pcs."}
+              Modal mengikuti satuan pembelian terbesar yang aktif ({costUnit}).
+              Stok tetap disimpan dalam pcs.
             </p>
+            {costUnitIsi > 1 && costInput > 0 && (
+              <p className="mt-1 text-xs text-gray-500">
+                Setara Rp {formatCurrency(costInput / costUnitIsi)} per pcs.
+              </p>
+            )}
+            {costInput > 0 && costUnitSellPrice > 0 && (
+              <p
+                className={`mt-1 text-xs font-medium ${
+                  estimatedProfit >= 0 ? "text-emerald-600" : "text-red-600"
+                }`}
+              >
+                Estimasi laba per {costUnit}: Rp{" "}
+                {formatCurrency(estimatedProfit)}
+              </p>
+            )}
           </div>
         </div>
 

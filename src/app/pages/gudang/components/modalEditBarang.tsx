@@ -14,6 +14,8 @@ interface ModalEditBarangProps {
     updatedUnits: ProductUnit[],
     updatedStock: number,
     image: string,
+    costPrice: number,
+    costUnit: string,
   ) => void;
 }
 
@@ -25,6 +27,10 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
   const [prices, setPrices] = useState<Record<string, number>>(
     product.units.reduce((acc, unit) => ({ ...acc, [unit.satuan]: unit.price }), {})
   );
+  const [costPrice, setCostPrice] = useState(product.cost_price ?? 0);
+  const costUnit = product.cost_unit ?? "Pcs";
+  const costUnitSellPrice = prices[costUnit] ?? 0;
+  const estimatedProfit = costUnitSellPrice - costPrice;
 
   const getStockForUnit = (unit: ProductUnit) => {
     return Math.floor(product.stock_pcs / unit.isi_dalam_satuan_dasar);
@@ -57,7 +63,14 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
 
     const updatedStock = product.stock_pcs + totalAddedPcs;
 
-    onSave(product.id, updatedUnits, updatedStock, image);
+    onSave(
+      product.id,
+      updatedUnits,
+      updatedStock,
+      image,
+      costPrice,
+      costUnit,
+    );
     onClose();
   };
 
@@ -67,7 +80,7 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-200">
           <h2 className="text-base sm:text-lg font-semibold text-gray-900">
-            Update Stok & Harga Produk
+            Update Stok, Harga Jual & Modal
           </h2>
           <button
             onClick={onClose}
@@ -135,14 +148,14 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
                 <span className="text-[8px] text-white font-bold">Rp</span>
               </div>
               <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-                Penyesuaian Harga (Rp)
+                Penyesuaian Harga Jual (Rp)
               </h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {product.units.map((unit) => (
                 <div key={unit.satuan}>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Harga per {unit.satuan}
+                    Harga Jual per {unit.satuan}
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
@@ -157,6 +170,46 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* HARGA MODAL */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-4 h-4 bg-blue-700 rounded-sm flex items-center justify-center">
+                <span className="text-[8px] text-white font-bold">Rp</span>
+              </div>
+              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                Harga Modal
+              </h3>
+            </div>
+            <div className="max-w-xs">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Harga Modal per {costUnit}
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                  Rp
+                </span>
+                <input
+                  type="number"
+                  value={costPrice || ""}
+                  onChange={(e) => setCostPrice(parseInt(e.target.value, 10) || 0)}
+                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                Modal dihitung per {costUnit}. Stok tetap dikonversi ke pcs.
+              </p>
+              {costPrice > 0 && costUnitSellPrice > 0 && (
+                <p
+                  className={`mt-1 text-xs font-medium ${
+                    estimatedProfit >= 0 ? "text-emerald-600" : "text-red-600"
+                  }`}
+                >
+                  Estimasi laba per {costUnit}: {formatCurrency(estimatedProfit)}
+                </p>
+              )}
             </div>
           </div>
         </div>

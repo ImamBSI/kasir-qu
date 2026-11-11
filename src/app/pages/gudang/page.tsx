@@ -64,6 +64,8 @@ export default function GudangPage() {
     updatedUnits: ProductUnit[],
     updatedStock: number,
     image: string,
+    costPrice: number,
+    costUnit: string,
   ) => {
     setProducts((prev) =>
       prev.map((p) =>
@@ -73,6 +75,8 @@ export default function GudangPage() {
               units: updatedUnits,
               stock_pcs: updatedStock,
               image: image || "/images/placeholder.svg",
+              cost_price: costPrice,
+              cost_unit: costUnit,
             }
           : p
       )
@@ -84,6 +88,7 @@ export default function GudangPage() {
     name: string;
     category: string;
     cost_price: number;
+    cost_unit: string;
     image: string;
     units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
   }) => {
@@ -96,6 +101,7 @@ export default function GudangPage() {
       image: newProduct.image || "/images/placeholder.svg",
       stock_pcs: 0,
       cost_price: newProduct.cost_price,
+      cost_unit: newProduct.cost_unit,
       min_stock: 10,
       units: newProduct.units,
     };
