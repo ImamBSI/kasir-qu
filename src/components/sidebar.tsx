@@ -59,7 +59,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               <Store className="size-4 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-gray-900">CommercePro</h1>
+              <h1 className="font-bold text-gray-900">KasirQu</h1>
               <p className="text-xs text-gray-500">Admin Console</p>
             </div>
           </div>
