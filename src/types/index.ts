@@ -1,3 +1,13 @@
+export type UserRole = "SADM" | "ADM" | "STF";
+
+export interface AuthUser {
+  id: number;
+  name: string;
+  username: string;
+  password: string;
+  role: UserRole;
+}
+
 export interface ProductUnit {
   satuan: string;
   isi_dalam_satuan_dasar: number;

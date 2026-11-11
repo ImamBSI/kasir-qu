@@ -48,6 +48,13 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
     setShowDropdown(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("kasirqu-user");
+    router.push("/login");
+  };
+
+  if (pathname === "/login") return <>{children}</>;
+
   return (
     <div className="flex h-dvh overflow-hidden bg-white">
       {/* Sidebar - desktop only */}
@@ -99,7 +106,10 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
               </button>
             </li>
             <li>
-              <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 w-full">
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 w-full"
+              >
                 <LogOut className="size-5" />
                 Logout
               </button>

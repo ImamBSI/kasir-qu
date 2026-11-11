@@ -266,11 +266,6 @@ export default function DashboardPage() {
                 <TableIcon className="size-5 text-blue-600" />
                 Recent Order
               </h2>
-              <DateRange
-                startDate={startDate}
-                endDate={endDate}
-                onChange={handleDateChange}
-              />
             </div>
             {/* Mobile list */}
             <div className="md:hidden max-h-[240px] overflow-y-auto divide-y divide-gray-200">
