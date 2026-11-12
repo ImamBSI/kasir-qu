@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SideBar from "@/components/Sidebar";
+import { getAuthenticatedUser } from "@/lib/session";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,15 +26,17 @@ export const viewport: Viewport = {
   themeColor: "#1d4ed8",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getAuthenticatedUser();
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full">
-        <SideBar>{children}</SideBar>
+        <SideBar userRole={user?.role ?? null}>{children}</SideBar>
       </body>
     </html>
   );

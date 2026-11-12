@@ -43,6 +43,11 @@ Untuk membuat akun admin pertama saat menjalankan `npm run db:seed`, isi
 di `.env.local`. Password admin tidak disimpan di source code; akun yang sudah
 ada tidak akan diubah saat seed dijalankan ulang.
 
+Pengguna dengan role `SADM` dapat mengelola akun di `/pages/users`: membuat
+akun `SADM`, `ADM`, atau `STF`, mengubah nama/username/role, mereset password,
+serta mengaktifkan atau menonaktifkan akun. Akun tidak dihapus agar relasi
+transaksi tetap terjaga. Setiap perubahan memerlukan otorisasi `SADM` di server.
+
 Jalankan `npm run db:seed` sekali untuk membuat/memperbarui tabel database.
 Perintah ini tidak memasukkan produk atau transaksi dummy; produk operasional
 ditambahkan melalui halaman Gudang.

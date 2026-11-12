@@ -9,10 +9,12 @@ import {
   LayoutDashboardIcon,
   Search,
   Store,
+  UsersRound,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import type { UserRole } from "@/types";
 
 const menuItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboardIcon },
@@ -21,7 +23,13 @@ const menuItems = [
   { href: "/pages/laporan", label: "Laporan", icon: ChartColumnIcon },
 ];
 
-export default function SideBar({ children }: { children: React.ReactNode }) {
+export default function SideBar({
+  children,
+  userRole,
+}: {
+  children: React.ReactNode;
+  userRole: UserRole | null;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +37,19 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
   const [logoutError, setLogoutError] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const filteredItems = menuItems.filter((item) =>
+  const visibleMenuItems =
+    userRole === "SADM"
+      ? [
+          ...menuItems,
+          {
+            href: "/pages/users",
+            label: "User Manager",
+            icon: UsersRound,
+          },
+        ]
+      : menuItems;
+
+  const filteredItems = visibleMenuItems.filter((item) =>
     item.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -88,7 +108,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         {/* Menu */}
         <nav className="flex-1 p-4">
           <ul className="space-y-1">
-            {menuItems.map((item) => {
+            {visibleMenuItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <li key={item.href}>
@@ -202,7 +222,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
         className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]"
       >
         <ul className="flex">
-          {menuItems.map((item) => {
+          {visibleMenuItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <li key={item.href} className="flex-1">

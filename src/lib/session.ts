@@ -132,3 +132,13 @@ export async function requireAuthenticatedUser() {
 
   return user;
 }
+
+export async function requireSuperAdminUser() {
+  const user = await requireAuthenticatedUser();
+
+  if (user.role !== "SADM") {
+    redirect("/");
+  }
+
+  return user;
+}
