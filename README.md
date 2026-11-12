@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KasirQu
 
-## Getting Started
+KasirQu adalah aplikasi kasir berbasis Next.js.
 
-First, run the development server:
+## Menyiapkan akses aplikasi
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Halaman dashboard dan semua halaman di `/pages/*` hanya dapat dibuka oleh
+pengguna yang berhasil login dan memiliki `is_active = TRUE`. Status akun
+diperiksa kembali dari database pada setiap permintaan halaman yang dilindungi.
+Sesi memakai cookie `HttpOnly`, bertanda tangan, dan berlaku selama 8 jam.
+
+Login menggunakan tabel PostgreSQL Neon berikut:
+
+```sql
+CREATE TABLE users (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(10) NOT NULL CHECK (role IN ('SADM', 'ADM', 'STF')),
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`password_hash` harus berisi hash bcrypt, bukan password teks biasa.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Salin `.env.example` menjadi `.env.local`, lalu isi:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `NEON_DATABASE_URL`: connection string PostgreSQL Neon. Gunakan pooled
+  connection string untuk deployment serverless.
+- `AUTH_SESSION_SECRET`: secret acak minimal 32 byte. Buat dengan:
 
-## Learn More
+  ```powershell
+  node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"
+  ```
 
-To learn more about Next.js, take a look at the following resources:
+Atur kedua variabel tersebut di Vercel untuk environment yang digunakan.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Menjalankan lokal
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm install
+npm run dev
+```
 
-## Deploy on Vercel
+Validasi sebelum deploy:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npm run build
+```

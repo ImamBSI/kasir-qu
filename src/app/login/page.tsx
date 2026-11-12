@@ -10,10 +10,8 @@ import {
   Store,
   UserRound,
 } from "lucide-react";
-import authUsersData from "@/data/authUsers.json";
-import type { AuthUser, UserRole } from "@/types";
+import type { UserRole } from "@/types";
 
-const authUsers = authUsersData as AuthUser[];
 const redirectByRole: Record<UserRole, string> = {
   SADM: "/",
   ADM: "/",
@@ -26,8 +24,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!username.trim() || !password) {
@@ -35,27 +34,29 @@ export default function LoginPage() {
       return;
     }
 
-    const account = authUsers.find(
-      (user) =>
-        user.username === username.trim() && user.password === password,
-    );
-
-    if (!account) {
-      setError("Username atau password salah.");
-      return;
-    }
-
     setError("");
-    localStorage.setItem(
-      "kasirqu-user",
-      JSON.stringify({
-        id: account.id,
-        name: account.name,
-        username: account.username,
-        role: account.role,
-      }),
-    );
-    router.push(redirectByRole[account.role]);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username.trim(), password }),
+      });
+      const result: { error?: string; role?: UserRole } = await response.json();
+
+      if (!response.ok || !result.role || !redirectByRole[result.role]) {
+        setError(result.error ?? "Username atau password salah.");
+        return;
+      }
+
+      router.replace(redirectByRole[result.role]);
+      router.refresh();
+    } catch {
+      setError("Tidak dapat menghubungi server. Coba lagi.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -117,7 +118,7 @@ export default function LoginPage() {
                   htmlFor="username"
                   className="mb-1.5 block text-sm font-medium text-gray-700"
                 >
-                  Email atau Username
+                  Username
                 </label>
                 <div className="relative">
                   <UserRound className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
@@ -127,7 +128,7 @@ export default function LoginPage() {
                     autoComplete="username"
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
-                    placeholder="Masukkan email atau username"
+                    placeholder="Masukkan username"
                     className="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -178,10 +179,11 @@ export default function LoginPage() {
 
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-700 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-800"
+                disabled={isSubmitting}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-700 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <LogIn className="size-4" />
-                Masuk
+                {isSubmitting ? "Memeriksa..." : "Masuk"}
               </button>
             </form>
           </section>

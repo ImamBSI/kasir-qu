@@ -26,6 +26,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
 
   const filteredItems = menuItems.filter((item) =>
@@ -48,9 +49,21 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
     setShowDropdown(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("kasirqu-user");
-    router.push("/login");
+  const handleLogout = async () => {
+    setLogoutError("");
+
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (!response.ok) {
+        setLogoutError("Gagal keluar. Coba lagi.");
+        return;
+      }
+
+      router.replace("/login");
+      router.refresh();
+    } catch {
+      setLogoutError("Tidak dapat menghubungi server. Coba lagi.");
+    }
   };
 
   if (pathname === "/login") return <>{children}</>;
@@ -98,6 +111,11 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-200">
+          {logoutError && (
+            <p role="alert" className="mb-2 text-xs text-red-600">
+              {logoutError}
+            </p>
+          )}
           <ul className="space-y-1">
             <li>
               <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 w-full">
