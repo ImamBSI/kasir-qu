@@ -12,36 +12,61 @@ interface ModalEditBarangProps {
   onSave: (
     productId: number,
     updatedUnits: ProductUnit[],
-    updatedStock: number,
     image: string,
     costPrice: number,
     costUnit: string,
   ) => void;
+  onAddStock: (productId: number, quantity: number, satuan: string) => void;
 }
 
-export default function ModalEditBarang({ product, onClose, onSave }: ModalEditBarangProps) {
+const defaultFieldClass =
+  "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+const priceFieldClass =
+  "w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+export default function ModalEditBarang({
+  product,
+  onClose,
+  onSave,
+  onAddStock,
+}: ModalEditBarangProps) {
   const [image, setImage] = useState(product.image);
-  const [stockAdditions, setStockAdditions] = useState<Record<string, number>>(
-    product.units.reduce((acc, unit) => ({ ...acc, [unit.satuan]: 0 }), {})
-  );
   const [prices, setPrices] = useState<Record<string, number>>(
-    product.units.reduce((acc, unit) => ({ ...acc, [unit.satuan]: unit.price }), {})
+    product.units.reduce(
+      (acc, unit) => ({ ...acc, [unit.satuan]: unit.price }),
+      {},
+    ),
   );
-  const [costPrice, setCostPrice] = useState(product.cost_price ?? 0);
-  const costUnit = product.cost_unit ?? "Pcs";
-  const costUnitSellPrice = prices[costUnit] ?? 0;
-  const estimatedProfit = costUnitSellPrice - costPrice;
+  const [costs, setCosts] = useState<Record<string, number>>(
+    product.units.reduce((acc, unit) => {
+      let initialCost = unit.cost_price ?? 0;
 
-  const getStockForUnit = (unit: ProductUnit) => {
-    return Math.floor(product.stock_pcs / unit.isi_dalam_satuan_dasar);
-  };
+      if (unit.cost_price == null) {
+        if (product.cost_unit === unit.satuan) {
+          initialCost = product.cost_price ?? 0;
+        } else if (!product.cost_unit || product.cost_unit === "Pcs") {
+          initialCost = (product.cost_price ?? 0) * unit.isi_dalam_satuan_dasar;
+        }
+      }
 
-  const handleStockChange = (satuan: string, value: string) => {
-    setStockAdditions((prev) => ({
-      ...prev,
-      [satuan]: parseInt(value, 10) || 0,
-    }));
-  };
+      return { ...acc, [unit.satuan]: initialCost };
+    }, {}),
+  );
+
+  const defaultStockUnit =
+    product.units.find((u) => u.satuan === "Dus")?.satuan ??
+    product.units.find((u) => u.satuan === "Rcg")?.satuan ??
+    product.units[0]?.satuan ??
+    "Pcs";
+  const [stockUnit, setStockUnit] = useState(defaultStockUnit);
+  const [stockQty, setStockQty] = useState(0);
+  const [stockMessage, setStockMessage] = useState("");
+
+  const selectedUnit =
+    product.units.find((u) => u.satuan === stockUnit) ?? product.units[0];
+  const selectedIsi = selectedUnit?.isi_dalam_satuan_dasar ?? 1;
+  const projectedStock =
+    product.stock_pcs + (stockQty > 0 ? Math.round(stockQty * selectedIsi) : 0);
 
   const handlePriceChange = (satuan: string, value: string) => {
     setPrices((prev) => ({
@@ -50,26 +75,42 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
     }));
   };
 
+  const handleCostChange = (satuan: string, value: string) => {
+    setCosts((prev) => ({
+      ...prev,
+      [satuan]: parseInt(value, 10) || 0,
+    }));
+  };
+
+  const handleAddStock = () => {
+    if (!selectedUnit || stockQty <= 0) return;
+
+    const addedPcs = Math.round(stockQty * selectedIsi);
+    onAddStock(product.id, stockQty, selectedUnit.satuan);
+    setStockMessage(
+      `Berhasil menambah ${stockQty} ${selectedUnit.satuan} (+${addedPcs} pcs).`,
+    );
+    setStockQty(0);
+  };
+
   const handleSave = () => {
     const updatedUnits = product.units.map((unit) => ({
       ...unit,
       price: prices[unit.satuan] ?? unit.price,
+      cost_price: costs[unit.satuan] ?? unit.cost_price ?? 0,
     }));
 
-    const totalAddedPcs = product.units.reduce(
-      (sum, unit) => sum + (stockAdditions[unit.satuan] ?? 0) * unit.isi_dalam_satuan_dasar,
-      0
-    );
-
-    const updatedStock = product.stock_pcs + totalAddedPcs;
+    const primaryUnit =
+      product.units.find((unit) => unit.satuan === "Dus") ??
+      product.units.find((unit) => unit.satuan === "Rcg") ??
+      product.units[0];
 
     onSave(
       product.id,
       updatedUnits,
-      updatedStock,
       image,
-      costPrice,
-      costUnit,
+      primaryUnit ? (costs[primaryUnit.satuan] ?? 0) : 0,
+      primaryUnit?.satuan ?? "Pcs",
     );
     onClose();
   };
@@ -103,42 +144,91 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
               />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">{product.name}</p>
+              <p className="text-sm font-semibold text-gray-900">
+                {product.name}
+              </p>
               <p className="text-xs text-gray-500">SKU: {product.sku}</p>
             </div>
           </div>
 
-          <ImageUpload value={image} onChange={setImage} />
-
-          {/* UPDATE STOK BARU */}
+          {/* TAMBAH STOK MASUK */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-4 h-4 bg-blue-700 rounded-sm flex items-center justify-center">
                 <Package className="size-2.5 text-white" />
               </div>
               <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-                Update Stok Baru
+                Tambah Stok Masuk
               </h3>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              {product.units.map((unit) => (
-                <div key={unit.satuan}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Tambah {unit.satuan}
-                  </label>
-                  <input
-                    type="number"
-                    value={stockAdditions[unit.satuan] ?? 0}
-                    onChange={(e) => handleStockChange(unit.satuan, e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    min="0"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Stok saat ini: {getStockForUnit(unit)}
-                  </p>
-                </div>
-              ))}
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Jumlah
+                </label>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min="0"
+                  value={stockQty || ""}
+                  onChange={(e) => {
+                    setStockQty(parseInt(e.target.value, 10) || 0);
+                    setStockMessage("");
+                  }}
+                  placeholder="0"
+                  className={defaultFieldClass}
+                />
+              </div>
+
+              <div className="sm:w-52">
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Satuan
+                </label>
+                <select
+                  value={stockUnit}
+                  onChange={(e) => {
+                    setStockUnit(e.target.value);
+                    setStockMessage("");
+                  }}
+                  className={defaultFieldClass}
+                >
+                  {product.units.map((unit) => (
+                    <option key={unit.satuan} value={unit.satuan}>
+                      {unit.satuan} (isi {unit.isi_dalam_satuan_dasar} pcs)
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAddStock}
+                disabled={stockQty <= 0 || !selectedUnit}
+                className="w-full sm:w-auto px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400"
+              >
+                Tambah Stok
+              </button>
             </div>
+
+            <p className="text-xs text-gray-500 mt-2">
+              Stok saat ini:{" "}
+              <strong className="text-gray-700">{product.stock_pcs} pcs</strong>
+              {selectedUnit && stockQty > 0 && (
+                <>
+                  {" "}
+                  → {product.stock_pcs} + ({stockQty} × {selectedIsi}) ={" "}
+                  <strong className="text-gray-700">
+                    {projectedStock} pcs
+                  </strong>
+                </>
+              )}
+            </p>
+            {stockMessage && (
+              <p className="text-xs font-medium text-emerald-600 mt-1">
+                {stockMessage}
+              </p>
+            )}
           </div>
 
           {/* PENYESUAIAN HARGA */}
@@ -148,68 +238,66 @@ export default function ModalEditBarang({ product, onClose, onSave }: ModalEditB
                 <span className="text-[8px] text-white font-bold">Rp</span>
               </div>
               <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-                Penyesuaian Harga Jual (Rp)
+                Penyesuaian Harga Jual & Modal (Rp)
               </h3>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              {product.units.map((unit) => (
-                <div key={unit.satuan}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Harga Jual per {unit.satuan}
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                      Rp
-                    </span>
-                    <input
-                      type="number"
-                      value={prices[unit.satuan] ?? unit.price}
-                      onChange={(e) => handlePriceChange(unit.satuan, e.target.value)}
-                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            <ImageUpload value={image} onChange={setImage} />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-3">
+              {product.units.map((unit) => {
+                const sellPrice = prices[unit.satuan] ?? unit.price;
+                const costPrice = costs[unit.satuan] ?? 0;
+                const profit = sellPrice - costPrice;
 
-          {/* HARGA MODAL */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-4 h-4 bg-blue-700 rounded-sm flex items-center justify-center">
-                <span className="text-[8px] text-white font-bold">Rp</span>
-              </div>
-              <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-                Harga Modal
-              </h3>
-            </div>
-            <div className="max-w-xs">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Harga Modal per {costUnit}
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                  Rp
-                </span>
-                <input
-                  type="number"
-                  value={costPrice || ""}
-                  onChange={(e) => setCostPrice(parseInt(e.target.value, 10) || 0)}
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Modal dihitung per {costUnit}. Stok tetap dikonversi ke pcs.
-              </p>
-              {costPrice > 0 && costUnitSellPrice > 0 && (
-                <p
-                  className={`mt-1 text-xs font-medium ${
-                    estimatedProfit >= 0 ? "text-emerald-600" : "text-red-600"
-                  }`}
-                >
-                  Estimasi laba per {costUnit}: {formatCurrency(estimatedProfit)}
-                </p>
-              )}
+                return (
+                  <div key={unit.satuan} className="space-y-2">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        Harga Jual per {unit.satuan}
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                          Rp
+                        </span>
+                        <input
+                          type="number"
+                          value={prices[unit.satuan] ?? unit.price}
+                          onChange={(e) =>
+                            handlePriceChange(unit.satuan, e.target.value)
+                          }
+                          className={priceFieldClass}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        Harga Modal per {unit.satuan}
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                          Rp
+                        </span>
+                        <input
+                          type="number"
+                          value={costs[unit.satuan] ?? ""}
+                          onChange={(e) =>
+                            handleCostChange(unit.satuan, e.target.value)
+                          }
+                          className={priceFieldClass}
+                        />
+                      </div>
+                    </div>
+                    {sellPrice > 0 && costPrice > 0 && (
+                      <p
+                        className={`text-xs font-medium ${
+                          profit >= 0 ? "text-emerald-600" : "text-red-600"
+                        }`}
+                      >
+                        Laba: {formatCurrency(profit)}/{unit.satuan}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

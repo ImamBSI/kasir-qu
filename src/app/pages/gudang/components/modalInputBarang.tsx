@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import ImageUpload from "./imageUpload";
-import { formatCurrency } from "@/utils/format";
 
 interface ModalInputBarangProps {
   categories: string[];
@@ -14,7 +13,12 @@ interface ModalInputBarangProps {
     cost_price: number;
     cost_unit: string;
     image: string;
-    units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
+    units: {
+      satuan: string;
+      price: number;
+      isi_dalam_satuan_dasar: number;
+      cost_price: number;
+    }[];
   }) => void;
 }
 
@@ -32,44 +36,53 @@ export default function ModalInputBarang({
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
   const [pcsPrice, setPcsPrice] = useState(0);
+  const [pcsCost, setPcsCost] = useState(0);
   const [rcgPrice, setRcgPrice] = useState(0);
+  const [rcgCost, setRcgCost] = useState(0);
   const [rcgIsi, setRcgIsi] = useState(0);
   const [dusPrice, setDusPrice] = useState(0);
+  const [dusCost, setDusCost] = useState(0);
   const [dusIsi, setDusIsi] = useState(0);
-  const [costInput, setCostInput] = useState(0);
 
   const hasRcg = rcgPrice > 0 && rcgIsi > 0;
   const hasDus = dusPrice > 0 && dusIsi > 0;
-  const costUnit = hasDus ? "Dus" : hasRcg ? "Rcg" : "Pcs";
-  const costUnitIsi = hasDus ? dusIsi : hasRcg ? rcgIsi : 1;
-  const costUnitSellPrice = hasDus ? dusPrice : hasRcg ? rcgPrice : pcsPrice;
-  const estimatedProfit = costUnitSellPrice - costInput;
+  const primaryCostUnit = hasDus ? "Dus" : hasRcg ? "Rcg" : "Pcs";
+  const primaryCost = hasDus ? dusCost : hasRcg ? rcgCost : pcsCost;
   const canSave = name.trim().length > 0 && category.trim().length > 0 && pcsPrice > 0;
 
   const handleSave = () => {
     if (!canSave) return;
 
-    const units = [{ satuan: "Pcs", price: pcsPrice, isi_dalam_satuan_dasar: 1 }];
-    if (rcgPrice > 0 && rcgIsi > 0) {
+    const units = [
+      {
+        satuan: "Pcs",
+        price: pcsPrice,
+        isi_dalam_satuan_dasar: 1,
+        cost_price: pcsCost,
+      },
+    ];
+    if (hasRcg) {
       units.push({
         satuan: "Rcg",
         price: rcgPrice,
         isi_dalam_satuan_dasar: rcgIsi,
+        cost_price: rcgCost,
       });
     }
-    if (dusPrice > 0 && dusIsi > 0) {
+    if (hasDus) {
       units.push({
         satuan: "Dus",
         price: dusPrice,
         isi_dalam_satuan_dasar: dusIsi,
+        cost_price: dusCost,
       });
     }
 
     onSave({
       name: name.trim(),
       category: category.trim(),
-      cost_price: costInput,
-      cost_unit: costUnit,
+      cost_price: primaryCost,
+      cost_unit: primaryCostUnit,
       image,
       units,
     });
@@ -145,45 +158,93 @@ export default function ModalInputBarang({
             <div className="space-y-3">
               {/* PCS */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  HARGA JUAL PCS (DASAR)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                    Rp
-                  </span>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    value={pcsPrice || ""}
-                    onChange={(e) =>
-                      setPcsPrice(parseInt(e.target.value, 10) || 0)
-                    }
-                    placeholder="0"
-                    className={priceClass}
-                  />
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      HARGA JUAL PCS (DASAR)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                        Rp
+                      </span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={pcsPrice || ""}
+                        onChange={(e) =>
+                          setPcsPrice(parseInt(e.target.value, 10) || 0)
+                        }
+                        placeholder="Harga jual per Pcs"
+                        className={priceClass}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      HARGA MODAL PCS
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                        Rp
+                      </span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={pcsCost || ""}
+                        onChange={(e) =>
+                          setPcsCost(parseInt(e.target.value, 10) || 0)
+                        }
+                        placeholder="Harga beli per Pcs"
+                        className={priceClass}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* RCG */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  HARGA JUAL RCG
-                </label>
-                <div className="relative mb-1.5">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                    Rp
-                  </span>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    value={rcgPrice || ""}
-                    onChange={(e) =>
-                      setRcgPrice(parseInt(e.target.value, 10) || 0)
-                    }
-                    placeholder="Harga jual per Renceng"
-                    className={priceClass}
-                  />
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mb-1.5">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      HARGA JUAL RCG
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                        Rp
+                      </span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={rcgPrice || ""}
+                        onChange={(e) =>
+                          setRcgPrice(parseInt(e.target.value, 10) || 0)
+                        }
+                        placeholder="Harga jual per Rcg"
+                        className={priceClass}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      HARGA MODAL RCG
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                        Rp
+                      </span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={rcgCost || ""}
+                        onChange={(e) =>
+                          setRcgCost(parseInt(e.target.value, 10) || 0)
+                        }
+                        placeholder="Harga beli per Rcg"
+                        className={priceClass}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500 whitespace-nowrap">
@@ -205,23 +266,47 @@ export default function ModalInputBarang({
 
               {/* DUS */}
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  HARGA JUAL DUS
-                </label>
-                <div className="relative mb-1.5">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                    Rp
-                  </span>
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    value={dusPrice || ""}
-                    onChange={(e) =>
-                      setDusPrice(parseInt(e.target.value, 10) || 0)
-                    }
-                    placeholder="Harga jual per Dus"
-                    className={priceClass}
-                  />
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mb-1.5">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      HARGA JUAL DUS
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                        Rp
+                      </span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={dusPrice || ""}
+                        onChange={(e) =>
+                          setDusPrice(parseInt(e.target.value, 10) || 0)
+                        }
+                        placeholder="Harga jual per Dus"
+                        className={priceClass}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                      HARGA MODAL DUS
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                        Rp
+                      </span>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={dusCost || ""}
+                        onChange={(e) =>
+                          setDusCost(parseInt(e.target.value, 10) || 0)
+                        }
+                        placeholder="Harga beli per Dus"
+                        className={priceClass}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500 whitespace-nowrap">
@@ -243,46 +328,6 @@ export default function ModalInputBarang({
             </div>
           </div>
 
-          {/* Harga Modal */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Harga Modal per {costUnit}
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                Rp
-              </span>
-              <input
-                type="number"
-                inputMode="numeric"
-                value={costInput || ""}
-                onChange={(e) =>
-                  setCostInput(parseInt(e.target.value, 10) || 0)
-                }
-                placeholder={`Harga beli per ${costUnit}`}
-                className={priceClass}
-              />
-            </div>
-            <p className="mt-1 text-xs text-gray-500">
-              Modal mengikuti satuan pembelian terbesar yang aktif ({costUnit}).
-              Stok tetap disimpan dalam pcs.
-            </p>
-            {costUnitIsi > 1 && costInput > 0 && (
-              <p className="mt-1 text-xs text-gray-500">
-                Setara Rp {formatCurrency(costInput / costUnitIsi)} per pcs.
-              </p>
-            )}
-            {costInput > 0 && costUnitSellPrice > 0 && (
-              <p
-                className={`mt-1 text-xs font-medium ${
-                  estimatedProfit >= 0 ? "text-emerald-600" : "text-red-600"
-                }`}
-              >
-                Estimasi laba per {costUnit}: Rp{" "}
-                {formatCurrency(estimatedProfit)}
-              </p>
-            )}
-          </div>
         </div>
 
         {/* Footer */}

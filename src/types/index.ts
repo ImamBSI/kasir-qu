@@ -12,6 +12,7 @@ export interface ProductUnit {
   satuan: string;
   isi_dalam_satuan_dasar: number;
   price: number;
+  cost_price?: number;
 }
 
 export interface Product {

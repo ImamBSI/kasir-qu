@@ -28,7 +28,9 @@ export default function GudangPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [currentPage, setCurrentPage] = useState(1);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editingProductId, setEditingProductId] = useState<number | null>(
+    null,
+  );
   const [showInputModal, setShowInputModal] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [selectedUnits, setSelectedUnits] = useState<Record<number, number>>(
@@ -38,6 +40,11 @@ export default function GudangPage() {
     const cats = [...new Set(products.map((p) => p.category))];
     return ["Semua", ...cats];
   }, [products]);
+
+  const editingProduct = useMemo(
+    () => products.find((p) => p.id === editingProductId) ?? null,
+    [products, editingProductId],
+  );
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
@@ -62,7 +69,6 @@ export default function GudangPage() {
   const handleSaveUpdate = (
     productId: number,
     updatedUnits: ProductUnit[],
-    updatedStock: number,
     image: string,
     costPrice: number,
     costUnit: string,
@@ -73,7 +79,6 @@ export default function GudangPage() {
           ? {
               ...p,
               units: updatedUnits,
-              stock_pcs: updatedStock,
               image: image || "/images/placeholder.svg",
               cost_price: costPrice,
               cost_unit: costUnit,
@@ -81,7 +86,26 @@ export default function GudangPage() {
           : p
       )
     );
-    setEditingProduct(null);
+    setEditingProductId(null);
+  };
+
+  const handleAddStock = (
+    productId: number,
+    quantity: number,
+    satuan: string,
+  ) => {
+    if (quantity <= 0) return;
+    setProducts((prev) =>
+      prev.map((p) => {
+        if (p.id !== productId) return p;
+        const unit = p.units.find((u) => u.satuan === satuan) ?? p.units[0];
+        if (!unit) return p;
+        const addedPcs = Math.round(
+          quantity * unit.isi_dalam_satuan_dasar,
+        );
+        return { ...p, stock_pcs: p.stock_pcs + addedPcs };
+      }),
+    );
   };
 
   const handleAddProduct = (newProduct: {
@@ -90,7 +114,12 @@ export default function GudangPage() {
     cost_price: number;
     cost_unit: string;
     image: string;
-    units: { satuan: string; price: number; isi_dalam_satuan_dasar: number }[];
+    units: {
+      satuan: string;
+      price: number;
+      isi_dalam_satuan_dasar: number;
+      cost_price: number;
+    }[];
   }) => {
     const maxId = products.reduce((max, p) => Math.max(max, p.id), 0);
     const product: Product = {
@@ -236,7 +265,7 @@ export default function GudangPage() {
                     )}
                   </div>
                   <button
-                    onClick={() => setEditingProduct(product)}
+                    onClick={() => setEditingProductId(product.id)}
                     className="px-3 py-2 bg-blue-700 text-white rounded-md text-xs font-medium active:bg-blue-800"
                   >
                     Edit
@@ -387,7 +416,7 @@ export default function GudangPage() {
                       <div className="flex justify-end">
                         <button
                           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-md text-sm font-medium hover:bg-blue-800 transition-colors"
-                          onClick={() => setEditingProduct(product)}
+                          onClick={() => setEditingProductId(product.id)}
                         >
                           Edit
                         </button>
@@ -455,8 +484,9 @@ export default function GudangPage() {
       {editingProduct && (
         <ModalEditBarang
           product={editingProduct}
-          onClose={() => setEditingProduct(null)}
+          onClose={() => setEditingProductId(null)}
           onSave={handleSaveUpdate}
+          onAddStock={handleAddStock}
         />
       )}
 
