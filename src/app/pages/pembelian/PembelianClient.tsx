@@ -32,6 +32,7 @@ export default function PembelianClient({
     message: string;
   } | null>(null);
   const noticeTimer = useRef<number | null>(null);
+  const checkoutNoticeTimer = useRef<number | null>(null);
 
   const showStockNotice = (key: string, message: string) => {
     setStockNotice({ key, message });
@@ -39,9 +40,23 @@ export default function PembelianClient({
     noticeTimer.current = window.setTimeout(() => setStockNotice(null), 3000);
   };
 
+  const showCheckoutNotice = (message: string) => {
+    setCheckoutMessage(message);
+    if (checkoutNoticeTimer.current) {
+      window.clearTimeout(checkoutNoticeTimer.current);
+    }
+    checkoutNoticeTimer.current = window.setTimeout(() => {
+      setCheckoutMessage(null);
+      checkoutNoticeTimer.current = null;
+    }, 3500);
+  };
+
   useEffect(() => {
     return () => {
       if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+      if (checkoutNoticeTimer.current) {
+        window.clearTimeout(checkoutNoticeTimer.current);
+      }
     };
   }, []);
 
@@ -214,6 +229,10 @@ export default function PembelianClient({
     setIsSubmitting(true);
     setCheckoutError(null);
     setCheckoutMessage(null);
+    if (checkoutNoticeTimer.current) {
+      window.clearTimeout(checkoutNoticeTimer.current);
+      checkoutNoticeTimer.current = null;
+    }
     try {
       const result = await createSaleAction({
         customerName,
@@ -232,7 +251,7 @@ export default function PembelianClient({
       clearCart();
       setCustomerName("");
       setIsCartOpen(false);
-      setCheckoutMessage(
+      showCheckoutNotice(
         `Transaksi #${result.id} tersimpan · ${formatCurrency(result.total)}`,
       );
       router.refresh();
@@ -250,7 +269,16 @@ export default function PembelianClient({
   };
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="relative flex h-full overflow-hidden">
+      {checkoutMessage && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="absolute right-3 top-3 z-[70] max-w-sm rounded-lg border border-emerald-200 bg-white px-4 py-3 text-sm text-emerald-800 shadow-lg md:right-6 md:top-6"
+        >
+          {checkoutMessage}
+        </div>
+      )}
       {/* Main Content */}
       <div className="flex-1 flex flex-col bg-gray-50 min-w-0">
         {/* Search Bar */}
@@ -556,11 +584,6 @@ export default function PembelianClient({
           {checkoutError && (
             <p className="text-xs text-red-600" role="alert">
               {checkoutError}
-            </p>
-          )}
-          {checkoutMessage && (
-            <p className="text-xs text-emerald-700" role="status">
-              {checkoutMessage}
             </p>
           )}
           <div className="flex justify-between text-xs">

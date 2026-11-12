@@ -148,8 +148,8 @@ export async function createSale(
          )
          VALUES (
            $1, $2, $3, $4, $5, $6, $7, $8::numeric, $9::numeric,
-           $8::numeric * $6,
-           ($8::numeric - $9::numeric) * $6
+           $8::numeric * $6::integer,
+           ($8::numeric - $9::numeric) * $6::integer
          )`,
         [
           saleId,
