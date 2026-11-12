@@ -9,15 +9,12 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import purchasedData from "@/data/purchased.json";
-import productsData from "@/data/products.json";
-import type { Order, Product } from "@/types";
+import type { Order } from "@/types";
 import DateRange from "@/components/DateRange";
 import { formatCurrency } from "@/utils/format";
-import { getBaseStock, getMinStock } from "@/utils/stock";
 import CustomPieChart from "@/components/PieChart"; // Import komponen baru
-
-const products = productsData as Product[];
+import { getDashboardOrdersAction } from "@/app/actions/dashboard";
+import type { StockSummary } from "@/lib/reports";
 
 const COLORS = [
   "#2563eb",
@@ -47,17 +44,23 @@ function formatOrderDateTime(value: string) {
   };
 }
 
-export default function Dashboard() {
-  const orders = purchasedData as Order[];
-  const [startDate, setStartDate] = useState("2026-08-07");
-  const [endDate, setEndDate] = useState("2026-08-07");
+export default function Dashboard({
+  initialDate,
+  initialOrders,
+  initialStockWarnings,
+}: {
+  initialDate: string;
+  initialOrders: Order[];
+  initialStockWarnings: StockSummary[];
+}) {
+  const [orders, setOrders] = useState(initialOrders);
+  const [startDate, setStartDate] = useState(initialDate);
+  const [endDate, setEndDate] = useState(initialDate);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dateError, setDateError] = useState<string | null>(null);
   const router = useRouter();
-  const filteredOrders = useMemo(() => {
-    return orders.filter((order) => {
-      const orderDate = order.order_date.split("T")[0];
-      return orderDate >= startDate && orderDate <= endDate;
-    });
-  }, [orders, startDate, endDate]);
+
+  const filteredOrders = orders;
 
   const salesProductData = useMemo(() => {
     const productSales: Record<string, number> = {};
@@ -97,13 +100,13 @@ export default function Dashboard() {
       order.items.forEach((item) => {
         const current = grouped.get(item.item_id);
         if (current) {
-          current.quantity += item.quantity;
+          current.quantity += item.pcs_quantity ?? item.quantity;
           current.revenue += item.subtotal;
         } else {
           grouped.set(item.item_id, {
             name: item.item_name,
-            quantity: item.quantity,
-            unit: item.unit,
+            quantity: item.pcs_quantity ?? item.quantity,
+            unit: "Pcs",
             revenue: item.subtotal,
           });
         }
@@ -115,21 +118,7 @@ export default function Dashboard() {
       .slice(0, 3);
   }, [filteredOrders]);
 
-  const stockWarnings = useMemo(
-    () =>
-      products
-        .map((product) => ({
-          id: product.id,
-          name: product.name,
-          stock: getBaseStock(product),
-          minStock: getMinStock(product),
-          unit: product.units[0].satuan,
-        }))
-        .filter((product) => product.stock < product.minStock)
-        .sort((a, b) => a.stock / a.minStock - b.stock / b.minStock)
-        .slice(0, 3),
-    [],
-  );
+  const stockWarnings = initialStockWarnings;
 
   const orderRows = useMemo(
     () =>
@@ -148,19 +137,44 @@ export default function Dashboard() {
     [filteredOrders],
   );
 
-  const handleDateChange = (newStart: string, newEnd: string) => {
+  const handleDateChange = async (newStart: string, newEnd: string) => {
     setStartDate(newStart);
     setEndDate(newEnd);
+    setDateError(null);
+    setOrders([]);
+    setIsLoading(true);
+    try {
+      const nextOrders = await getDashboardOrdersAction(
+        newStart,
+        newEnd || newStart,
+      );
+      setOrders(nextOrders);
+    } catch (error) {
+      setDateError(
+        error instanceof Error ? error.message : "Gagal memuat data transaksi.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-start justify-between mb-4 md:mb-6 shrink-0">
+      <div className="mb-4 flex flex-col gap-3 md:mb-6 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-gray-900">Overview</h1>
           <p className="text-sm text-gray-500 mt-1">
             Monitor performa penjualan, produk terlaris, dan stok toko.
           </p>
+        </div>
+        <div className="flex flex-col items-start gap-1">
+          <DateRange
+            startDate={startDate}
+            endDate={endDate}
+            onChange={handleDateChange}
+          />
+          {isLoading && <p className="text-xs text-gray-500">Memuat data...</p>}
+          {dateError && <p className="text-xs text-red-600">{dateError}</p>}
         </div>
       </div>
 

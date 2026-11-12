@@ -6,12 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:seed": "node scripts/seed.mjs",
+    "db:migrate-product-images": "node scripts/migrate-product-images.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1167.0",
+    "@aws-sdk/s3-request-presigner": "^3.1167.0",
     "@neondatabase/serverless": "^1.2.0",
     "bcryptjs": "^3.0.3",
     "daisyui": "^5.7.9",
+    "dotenv": "^18.0.10",
     "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.6",
     "lucide-react": "^1.28.0",

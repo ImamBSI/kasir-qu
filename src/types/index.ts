@@ -32,6 +32,7 @@ export interface OrderItem {
   item_id: string;
   item_name: string;
   quantity: number;
+  pcs_quantity?: number;
   unit: string;
   unit_price: number;
   subtotal: number;

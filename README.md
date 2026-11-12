@@ -38,6 +38,36 @@ Salin `.env.example` menjadi `.env.local`, lalu isi:
 
 Atur kedua variabel tersebut di Vercel untuk environment yang digunakan.
 
+Untuk membuat akun admin pertama saat menjalankan `npm run db:seed`, isi
+`SEED_ADMIN_NAME`, `SEED_ADMIN_USERNAME`, dan `SEED_ADMIN_PASSWORD` secara lokal
+di `.env.local`. Password admin tidak disimpan di source code; akun yang sudah
+ada tidak akan diubah saat seed dijalankan ulang.
+
+Jalankan `npm run db:seed` sekali untuk membuat/memperbarui tabel database.
+Perintah ini tidak memasukkan produk atau transaksi dummy; produk operasional
+ditambahkan melalui halaman Gudang.
+
+Foto produk yang diunggah di halaman Gudang disimpan di Neon Object Storage
+(API S3-compatible); database hanya menyimpan referensi objeknya. Buat bucket
+`gambar`, lalu isi variabel berikut di `.env.local` dan Vercel:
+
+- `AWS_ENDPOINT_URL_S3`: endpoint S3-compatible dari Neon.
+- `AWS_REGION`: region dari konfigurasi Neon (default lokal `us-east-1`).
+- `AWS_ACCESS_KEY_ID` dan `AWS_SECRET_ACCESS_KEY`: access key object storage.
+- `NEON_OBJECT_STORAGE_BUCKET`: nama bucket (`gambar` untuk proyek ini).
+
+Jangan commit access key atau file `.env.local`. Upload hanya menerima JPG, PNG,
+dan WebP hingga 2 MB. Objek dibaca menggunakan URL bertanda tangan yang berlaku
+selama satu jam.
+
+Jika database sudah berisi foto unggahan lama dalam bentuk Data URL, jalankan
+`npm run db:migrate-product-images` sekali setelah konfigurasi storage di atas
+lengkap. Script hanya memindahkan foto JPG, PNG, dan WebP hingga 2 MB; foto
+produk bawaan di `public/images` tidak dipindahkan.
+
+File JSON di `src/data` dipertahankan sebagai dataset analisis saja. Aplikasi
+tidak menggunakannya sebagai sumber produk, transaksi, dashboard, atau laporan.
+
 ## Menjalankan lokal
 
 ```bash

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { X, Package } from "lucide-react";
 import type { Product, ProductUnit } from "@/types";
 import { formatCurrency } from "@/utils/format";
+import { getProductImageUrl } from "@/utils/productImage";
 import ImageUpload from "./imageUpload";
 
 interface ModalEditBarangProps {
@@ -138,7 +139,7 @@ export default function ModalEditBarang({
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
             <div className="size-10 shrink-0 overflow-hidden rounded bg-gray-200">
               <img
-                src={image || "/images/placeholder.svg"}
+                src={getProductImageUrl(image)}
                 alt={product.name}
                 className="size-full object-cover"
               />
