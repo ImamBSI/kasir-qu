@@ -9,10 +9,10 @@ type GlobalWithPool = typeof globalThis & {
 const globalWithPool = globalThis as GlobalWithPool;
 
 export function getDbPool() {
-  const connectionString = process.env.NEON_DATABASE_URL;
+  const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
-    throw new Error("NEON_DATABASE_URL is required.");
+    throw new Error("DATABASE_URL is required.");
   }
 
   if (!globalWithPool.kasirQuPool) {
