@@ -15,6 +15,7 @@ const SESSION_DURATION_SECONDS = 60 * 60 * 8;
 
 interface SessionPayload {
   userId: string;
+  sessionVersion: number;
   expiresAt: number;
 }
 
@@ -39,10 +40,11 @@ export function isUserRole(role: string): role is UserRole {
   return role === "SADM" || role === "ADM" || role === "STF";
 }
 
-export function createSessionToken(userId: string) {
+export function createSessionToken(userId: string, sessionVersion: number) {
   const payload = Buffer.from(
     JSON.stringify({
       userId,
+      sessionVersion,
       expiresAt: Math.floor(Date.now() / 1000) + SESSION_DURATION_SECONDS,
     } satisfies SessionPayload),
   ).toString("base64url");
@@ -87,6 +89,10 @@ function getSessionUserId(token: string | undefined) {
     payload === null ||
     !("userId" in payload) ||
     typeof payload.userId !== "string" ||
+    !("sessionVersion" in payload) ||
+    typeof payload.sessionVersion !== "number" ||
+    !Number.isSafeInteger(payload.sessionVersion) ||
+    payload.sessionVersion < 0 ||
     !("expiresAt" in payload) ||
     typeof payload.expiresAt !== "number" ||
     payload.expiresAt <= Math.floor(Date.now() / 1000)
@@ -94,31 +100,41 @@ function getSessionUserId(token: string | undefined) {
     return null;
   }
 
-  return payload.userId;
+  return {
+    userId: payload.userId,
+    sessionVersion: payload.sessionVersion,
+  };
 }
 
 export async function getAuthenticatedUser(): Promise<AuthenticatedUser | null> {
   const cookieStore = await cookies();
-  const userId = getSessionUserId(
+  const session = getSessionUserId(
     cookieStore.get(SESSION_COOKIE_NAME)?.value,
   );
-  if (!userId) return null;
+  if (!session) return null;
 
   const result = await getDbPool().query<{
     id: string;
     name: string;
     username: string;
     role: string;
+    session_version: number;
   }>(
-    `SELECT id::text, name, username, role
+    `SELECT id::text, name, username, role, session_version
      FROM users
      WHERE id = $1 AND is_active = TRUE
      LIMIT 1`,
-    [userId],
+    [session.userId],
   );
   const user = result.rows[0];
 
-  if (!user || !isUserRole(user.role)) return null;
+  if (
+    !user ||
+    !isUserRole(user.role) ||
+    user.session_version !== session.sessionVersion
+  ) {
+    return null;
+  }
 
   return { ...user, role: user.role };
 }

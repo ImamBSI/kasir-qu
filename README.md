@@ -19,10 +19,14 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   role VARCHAR(10) NOT NULL CHECK (role IN ('SADM', 'ADM', 'STF')),
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  session_version INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ```
+
+`npm run db:seed` menambahkan `session_version` jika tabel `users` sudah ada.
+Reset password menaikkan versi tersebut sehingga sesi lama langsung tidak berlaku.
 
 `password_hash` harus berisi hash bcrypt, bukan password teks biasa.
 

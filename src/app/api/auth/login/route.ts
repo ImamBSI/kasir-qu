@@ -19,6 +19,7 @@ interface UserRow {
   password_hash: string;
   role: string;
   is_active: boolean;
+  session_version: number;
 }
 
 function isCredentials(value: unknown): value is Credentials {
@@ -68,7 +69,7 @@ export async function POST(request: Request) {
   }
 
   const result = await getDbPool().query<UserRow>(
-    `SELECT id::text, password_hash, role, is_active
+    `SELECT id::text, password_hash, role, is_active, session_version
      FROM users
      WHERE username = $1
      LIMIT 1`,
@@ -87,13 +88,17 @@ export async function POST(request: Request) {
   }
 
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE_NAME, createSessionToken(user.id), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 8,
-  });
+  cookieStore.set(
+    SESSION_COOKIE_NAME,
+    createSessionToken(user.id, user.session_version),
+    {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 8,
+    },
+  );
 
   return Response.json({ role: user.role });
 }

@@ -79,9 +79,7 @@ async function main() {
   });
   const db = new Client({
     connectionString,
-    ssl: /[?&]sslmode=/.test(connectionString)
-      ? undefined
-      : { rejectUnauthorized: false },
+    ssl: { rejectUnauthorized: true },
   });
 
   let migrated = 0;

@@ -37,10 +37,9 @@ function loadEnv() {
 }
 
 function buildClientConfig(connectionString) {
-  const hasSslParam = /[?&]sslmode=/.test(connectionString);
   return {
     connectionString,
-    ssl: hasSslParam ? undefined : { rejectUnauthorized: false },
+    ssl: { rejectUnauthorized: true },
   };
 }
 
