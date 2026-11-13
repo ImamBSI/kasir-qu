@@ -85,9 +85,10 @@ async function seedInitialAdmin(client, admin) {
 async function main() {
   loadEnv();
 
-  const connectionString = process.env.NEON_DATABASE_URL;
+  const connectionString =
+    process.env.DATABASE_URL || process.env.NEON_DATABASE_URL;
   if (!connectionString) {
-    console.error("❌ NEON_DATABASE_URL tidak ditemukan. Isi di .env atau .env.local.");
+    console.error("❌ DATABASE_URL tidak ditemukan. Isi di .env atau .env.local.");
     process.exitCode = 1;
     return;
   }

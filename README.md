@@ -32,7 +32,7 @@ Reset password menaikkan versi tersebut sehingga sesi lama langsung tidak berlak
 
 Salin `.env.example` menjadi `.env.local`, lalu isi:
 
-- `NEON_DATABASE_URL`: connection string PostgreSQL Neon. Gunakan pooled
+- `DATABASE_URL`: connection string PostgreSQL Neon. Gunakan pooled
   connection string untuk deployment serverless.
 - `AUTH_SESSION_SECRET`: secret acak minimal 32 byte. Buat dengan:
 
@@ -41,6 +41,8 @@ Salin `.env.example` menjadi `.env.local`, lalu isi:
   ```
 
 Atur kedua variabel tersebut di Vercel untuk environment yang digunakan.
+Neon menyediakan variabel `DATABASE_URL`; aplikasi juga masih menerima nama
+lama `NEON_DATABASE_URL` sebagai fallback.
 
 Untuk membuat akun admin pertama saat menjalankan `npm run db:seed`, isi
 `SEED_ADMIN_NAME`, `SEED_ADMIN_USERNAME`, dan `SEED_ADMIN_PASSWORD` secara lokal

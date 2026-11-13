@@ -66,7 +66,11 @@ function decodeImageDataUrl(value) {
 }
 
 async function main() {
-  const connectionString = requiredEnv("NEON_DATABASE_URL");
+  const connectionString =
+    process.env.DATABASE_URL || process.env.NEON_DATABASE_URL;
+  if (!connectionString) {
+    throw new Error("DATABASE_URL belum diatur.");
+  }
   const bucket = requiredEnv("NEON_OBJECT_STORAGE_BUCKET");
   const s3 = new S3Client({
     endpoint: requiredEnv("AWS_ENDPOINT_URL_S3"),
